@@ -17,7 +17,8 @@ public class Payment {
     private User user;
     @ManyToOne
     private Book book;
-    private String creditCardDetails;
+    @ManyToOne
+    private Card card;
     private String startDate;
     private String endDate;
 
@@ -33,9 +34,7 @@ public class Payment {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
+    public User getUser() { return user; }
 
     public void setUser(User user) {
         this.user = user;
@@ -49,12 +48,12 @@ public class Payment {
         this.book = book;
     }
 
-    public String getCreditCardDetails() {
-        return creditCardDetails;
+    public Card getCard() {
+        return card;
     }
 
-    public void setCreditCardDetails(String creditCardDetails) {
-        this.creditCardDetails = creditCardDetails;
+    public void setCard(Card card) {
+        this.card = card;
     }
 
     public String getStartDate() {
