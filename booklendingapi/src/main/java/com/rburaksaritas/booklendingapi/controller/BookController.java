@@ -39,11 +39,11 @@ public class BookController {
     }
 
     @PutMapping("/update/{isbn}")
-    public ResponseEntity<Book> updateBook(@PathVariable String isbn, @RequestBody Book book) {
+    public ResponseEntity<String> updateBook(@PathVariable String isbn, @RequestBody Book book) {
         try {
             Book updatedBook = bookService.updateBook(isbn, book);
             if (updatedBook != null) {
-                return ResponseEntity.ok(updatedBook);
+                return ResponseEntity.ok("Book is updated!" + updatedBook);
             } else {
                 return ResponseEntity.notFound().build();
             }
