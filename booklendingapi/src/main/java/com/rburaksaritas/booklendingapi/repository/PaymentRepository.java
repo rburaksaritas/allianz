@@ -1,4 +1,4 @@
-package com.rburaksaritas.booklendingapi.respository;
+package com.rburaksaritas.booklendingapi.repository;
 
 import com.rburaksaritas.booklendingapi.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;

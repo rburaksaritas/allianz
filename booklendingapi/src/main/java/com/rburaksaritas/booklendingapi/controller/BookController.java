@@ -14,12 +14,33 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @GetMapping("/{isbn}")
+    public ResponseEntity<String> getBook(@PathVariable String isbn) {
+        try {
+            Book book = bookService.getBook(isbn);
+            if (book != null) {
+                return ResponseEntity.ok("Book with ISBN " + isbn + ":\n" +
+                        "Author: " + book.getAuthor() + "\n" +
+                        "Title: " + book.getTitle() + "\n" +
+                        "Daily Cost: " + book.getDailyCost());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> add(@RequestBody Book book) {
-        try{
+        try {
             bookService.saveBook(book);
-            return ResponseEntity.ok("New book is added!");
-        } catch (Exception e){
+            return ResponseEntity.ok("New book is added!\n" +
+                    "ISBN: " + book.getIsbn() + "\n" +
+                    "Author: " + book.getAuthor() + "\n" +
+                    "Title: " + book.getTitle() + "\n" +
+                    "Daily Cost: " + book.getDailyCost());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add book: " + e.getMessage());
         }
     }
@@ -29,7 +50,7 @@ public class BookController {
         try {
             boolean deleted = bookService.deleteBook(isbn);
             if (deleted) {
-                return ResponseEntity.ok("Book deleted successfully!");
+                return ResponseEntity.ok("Book with ISBN " + isbn + " has been deleted.");
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -43,13 +64,17 @@ public class BookController {
         try {
             Book updatedBook = bookService.updateBook(isbn, book);
             if (updatedBook != null) {
-                return ResponseEntity.ok("Book is updated!" + updatedBook);
+                return ResponseEntity.ok("Book with ISBN " + isbn + " has been updated.\n" +
+                        "New Book Details:\n" +
+                        "ISBN: " + updatedBook.getIsbn() + "\n" +
+                        "Author: " + updatedBook.getAuthor() + "\n" +
+                        "Title: " + updatedBook.getTitle() + "\n" +
+                        "Daily Cost: " + updatedBook.getDailyCost());
             } else {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update book: " + e.getMessage());
         }
     }
-
 }
