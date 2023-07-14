@@ -22,7 +22,7 @@ public class PaymentController {
     public ResponseEntity<String> addPayment(@RequestBody Payment payment) {
         try {
             Payment savedPayment = paymentService.savePayment(payment);
-            return ResponseEntity.ok("Payment with ID " + savedPayment.getId() + " is added!");
+            return ResponseEntity.ok("Payment with ID " + savedPayment.getId() + " is added!" + payment);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add payment: " + e.getMessage());
         }

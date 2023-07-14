@@ -110,10 +110,7 @@ public class PaymentServiceImpl implements PaymentService {
             existingPayment.setEndDate(payment.getEndDate());
             existingPayment.setCost(totalCost);
         }
-
-        existingPayment.setCard(card);
         paymentRepository.save(existingPayment);
-
         return existingPayment;
     }
 

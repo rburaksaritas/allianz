@@ -26,6 +26,16 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    public Card updateCard(String cardNumber, Double balance) {
+        Card existingCard = cardRepository.findById(cardNumber).orElse(null);
+        if (existingCard != null) {
+            existingCard.setBalance(balance);
+            return cardRepository.save(existingCard);
+        }
+        return null;
+    }
+
+    @Override
     public void deleteCard(String cardNumber) {
         cardRepository.deleteById(cardNumber);
     }
