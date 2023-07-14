@@ -14,11 +14,19 @@ public class Card {
         // Empty constructor for JPA.
     }
 
-    public String getCardNumber() { return cardNumber; }
+    public String getCardNumber() {
+        return cardNumber;
+    }
 
-    public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 
-    public double getBalance() { return balance; }
+    public double getBalance() {
+        return balance;
+    }
 
-    public void setBalance(double balance) { this.balance = balance; }
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 }

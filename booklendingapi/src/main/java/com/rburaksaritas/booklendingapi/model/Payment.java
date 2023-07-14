@@ -1,10 +1,6 @@
 package com.rburaksaritas.booklendingapi.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Payment {
@@ -14,13 +10,20 @@ public class Payment {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_mail")
     private User user;
+
     @ManyToOne
+    @JoinColumn(name = "book_isbn")
     private Book book;
+
     @ManyToOne
+    @JoinColumn(name = "card_cardNumber")
     private Card card;
+
     private String startDate;
     private String endDate;
+    private double cost;
 
     public Payment() {
         // Empty constructor for JPA.
@@ -34,7 +37,9 @@ public class Payment {
         this.id = id;
     }
 
-    public User getUser() { return user; }
+    public User getUser() {
+        return user;
+    }
 
     public void setUser(User user) {
         this.user = user;
@@ -70,5 +75,13 @@ public class Payment {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 }
