@@ -84,6 +84,19 @@ The application also implements some basic business rules:
 
 The application uses the Spring Data JPA library for data persistence. This library automates the creation of tables in the MySQL database based on the defined models. The Payment table has foreign key relationships with the User, Book, and Card tables.
 
+## Database Configuration
+
+The database configuration details are specified in the `application.properties` file located in the `src/main/resources/` directory. Modify username and password according to your MySQL credentials.
+
+```properties
+spring.jpa.hibernate.ddl-auto=update
+
+spring.datasource.url=jdbc:mysql://localhost:3306/lendingdb
+spring.datasource.username=aztr
+spring.datasource.password=
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```
+
 ## Conclusion
 
 This document provides a brief overview of the structure and implementation of the book lending backend API. The API implements basic CRUD operations for four entities: User, Book, Card, and Payment. It also enforces some business rules to ensure data integrity and correctness.
