@@ -17,11 +17,11 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
      * @param endDate of lending
      * @return List of payments
      */
-    @Query("SELECT p FROM Payment p WHERE p.book.isbn = :bookIsbn " +
-            "AND ((STR_TO_DATE(:startDate, '%d-%m-%Y') <= STR_TO_DATE(p.startDate, '%d-%m-%Y') AND STR_TO_DATE(:endDate, '%d-%m-%Y') >= STR_TO_DATE(p.startDate, '%d-%m-%Y')) " +
-            "OR (STR_TO_DATE(:startDate, '%d-%m-%Y') <= STR_TO_DATE(p.endDate, '%d-%m-%Y') AND STR_TO_DATE(:endDate, '%d-%m-%Y') >= STR_TO_DATE(p.endDate, '%d-%m-%Y')) " +
-            "OR (STR_TO_DATE(:startDate, '%d-%m-%Y') <= STR_TO_DATE(p.startDate, '%d-%m-%Y') AND STR_TO_DATE(:endDate, '%d-%m-%Y') >= STR_TO_DATE(p.startDate, '%d-%m-%Y')) " +
-            "OR (STR_TO_DATE(p.startDate, '%d-%m-%Y') >= STR_TO_DATE(:startDate, '%d-%m-%Y') AND STR_TO_DATE(p.endDate, '%d-%m-%Y') <= STR_TO_DATE(:endDate, '%d-%m-%Y')))")
-    List<Payment> findOverlappingPayments(String startDate, String endDate, String bookIsbn);
+    @Query("SELECT p.id FROM Payment p WHERE p.book.isbn = :bookIsbn " +
+            "AND ((:startDate <= p.startDate AND :endDate >= p.startDate) " +
+            "OR (:startDate <= p.endDate AND :endDate >= p.endDate) " +
+            "OR (:startDate <= p.startDate AND :endDate >= p.startDate) " +
+            "OR (:startDate >= p.startDate AND :endDate <= p.endDate))")
+    List<Long> findOverlappingPayments(String bookIsbn, String startDate, String endDate);
 
 }

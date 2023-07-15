@@ -43,7 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Card", "cardNumber", payment.getCard().getCardNumber()));
 
         // Checks if the book is available.
-        if (!isAvailableBetweenDates(payment.getStartDate(), payment.getEndDate(), book.getIsbn())) {
+        if (!isAvailableBetweenDates(book.getIsbn(), payment.getStartDate(), payment.getEndDate())) {
             throw new IllegalArgumentException("Book is not available between the given dates.");
         }
 
@@ -152,8 +152,8 @@ public class PaymentServiceImpl implements PaymentService {
      * @param bookIsbn
      * @return availability status, true if available, false otherwise.
      */
-    private boolean isAvailableBetweenDates(String startDate, String endDate, String bookIsbn) {
-        List<Payment> overlappingPayments = paymentRepository.findOverlappingPayments(startDate, endDate, bookIsbn);
+    private boolean isAvailableBetweenDates(String bookIsbn, String startDate, String endDate) {
+        List<Long> overlappingPayments = paymentRepository.findOverlappingPayments(bookIsbn, startDate, endDate);
         return overlappingPayments.isEmpty();
     }
 
