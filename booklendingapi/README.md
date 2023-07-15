@@ -79,6 +79,8 @@ The application also implements some basic business rules:
 - When adding a payment, the application checks if the card has sufficient balance and if the book is available for the given dates.
 - After a successful payment, the application updates the balance on the card.
 - When updating a payment, the application does not allow changing the user, book, or card. Only the dates can be modified.
+- When updating a payment, the balance of the used card is adjusted accordingly. If the new number of days are fewer, the corresponding balance is returned to the card and vice versa.
+
 
 ## Data Persistence
 
