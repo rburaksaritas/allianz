@@ -50,7 +50,7 @@ public class BookController {
         try {
             boolean deleted = bookService.deleteBook(isbn);
             if (deleted) {
-                return ResponseEntity.ok("Book with ISBN " + isbn + " has been deleted.");
+                return ResponseEntity.status(HttpStatus.OK).body("Book with ISBN " + isbn + " has been deleted.");
             } else {
                 return ResponseEntity.notFound().build();
             }

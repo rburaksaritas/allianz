@@ -18,6 +18,15 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Payment> getPayment(@PathVariable Long id) {
+        try {
+            Payment payment = paymentService.getPayment(id);
+            return ResponseEntity.ok(payment);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
     @PostMapping("/add")
     public ResponseEntity<String> addPayment(@RequestBody Payment payment) {
         try {

@@ -32,6 +32,12 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    public Payment getPayment(Long id) {
+        return paymentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment", "id", id));
+    }
+
+    @Override
     public Payment savePayment(Payment payment) {
         User user = userRepository.findById(payment.getUser().getMail())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "mail", payment.getUser().getMail()));
@@ -100,10 +106,11 @@ public class PaymentServiceImpl implements PaymentService {
                 // Return the cost to the card's balance
                 existingPayment.getCard().setBalance(existingPayment.getCard().getBalance() + existingPayment.getCost());
                 // Withdraw the new total cost from the card's balance
-                if (card.getBalance() < totalCost) {
+                if (!sufficientBalance(card.getBalance(), totalCost)) {
                     throw new IllegalArgumentException("Insufficient balance in the credit card.");
                 }
                 card.setBalance(card.getBalance() - totalCost);
+                cardRepository.save(card);
             }
 
             existingPayment.setStartDate(payment.getStartDate());
