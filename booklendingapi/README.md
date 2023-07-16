@@ -4,6 +4,37 @@
 
 This document provides the developer documentation for the book lending backend API. The API is implemented using Java, Spring Boot, and Spring, and the data is stored in a MySQL database.
 
+## Prerequisites
+
+Before running the application, make sure you have Java Development Kit (JDK) (This app is developed with Java 8) and Maven installed in your system. If Maven is not installed, you can follow the instructions below to install it.
+
+For MacOS, you can use Homebrew to install Maven:
+
+```bash
+brew install maven
+```
+
+For Windows, download the Maven binary zip file from the official website, extract it, and then add the `bin` directory of the extracted directory to your system PATH.
+
+For Linux (Ubuntu), you can use the apt package manager to install Maven:
+
+```bash
+sudo apt update
+sudo apt install maven
+```
+
+## Running the Application
+
+To run the application, navigate to the root directory of the project where the `pom.xml` file is located.
+
+Run the following command:
+
+```bash
+mvn spring-boot:run
+```
+
+This command compiles the application and starts the Spring Boot server. Once the server is running, you can access the application at `http://localhost:8080`.
+
 ## Structure
 
 The application is structured into four directories:
