@@ -123,7 +123,8 @@ The application also implements some basic business rules:
 ## Postman Collection
 
 The Postman collection for testing functionalities of the app and constraints mentioned above can be found in the root directory as a JSON file which can be imported into Postman, `BookLendingAPI.postman_collection.json`. 
-<img width="1308" alt="Screenshot 2023-07-15 at 23 26 35" src="https://github.com/rburaksaritas/allianz/assets/86561984/e10f706a-3d0e-4e64-b1bf-cd4b203f8fca">
+<img width="1306" alt="Screenshot 2023-07-17 at 09 17 01" src="https://github.com/rburaksaritas/allianz/assets/86561984/5f48a52b-5c9f-433f-b162-b6e5d3599534">
+
 
 
 
