@@ -6,7 +6,7 @@ This document provides the developer documentation for the book lending backend 
 
 ## Prerequisites
 
-Before running the application, make sure you have Java Development Kit (JDK) (This app is developed with Java 8) and Maven installed in your system. If Maven is not installed, you can follow the instructions below to install it.
+Before running the application, make sure you have Java Development Kit (JDK) (This app is developed with Java 8), MySQL and Maven installed in your system. If Maven is not installed, you can follow the instructions below to install it.
 
 For MacOS, you can use Homebrew to install Maven:
 
@@ -25,9 +25,17 @@ sudo apt install maven
 
 ## Running the Application
 
-To run the application, navigate to the root directory of the project where the `pom.xml` file is located.
+To run the application, create a database instance with the name "lendingdb" first. One alternative is through MySQL CLI:
 
-Run the following command:
+```bash
+mysql
+```
+
+```sql
+> CREATE DATABASE lendingdb;
+```
+
+then, navigate to the root directory of the project where the `pom.xml` file is located. Run the following command:
 
 ```bash
 mvn spring-boot:run
