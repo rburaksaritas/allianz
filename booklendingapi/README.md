@@ -4,6 +4,45 @@
 
 This document provides the developer documentation for the book lending backend API. The API is implemented using Java, Spring Boot, and Spring, and the data is stored in a MySQL database.
 
+## Prerequisites
+
+Before running the application, make sure you have Java Development Kit (JDK) (This app is developed with Java 8), MySQL and Maven installed in your system. If Maven is not installed, you can follow the instructions below to install it.
+
+For MacOS, you can use Homebrew to install Maven:
+
+```bash
+brew install maven
+```
+
+For Windows, download the Maven binary zip file from the official website, extract it, and then add the `bin` directory of the extracted directory to your system PATH.
+
+For Linux (Ubuntu), you can use the apt package manager to install Maven:
+
+```bash
+sudo apt update
+sudo apt install maven
+```
+
+## Running the Application
+
+To run the application, create a database instance with the name "lendingdb" first. One alternative is through MySQL CLI:
+
+```bash
+mysql
+```
+
+```sql
+> CREATE DATABASE lendingdb;
+```
+
+then, navigate to the root directory of the project where the `pom.xml` file is located. Run the following command:
+
+```bash
+mvn spring-boot:run
+```
+
+This command compiles the application and starts the Spring Boot server. Once the server is running, you can access the application at `http://localhost:8080`.
+
 ## Structure
 
 The application is structured into four directories:
@@ -84,7 +123,8 @@ The application also implements some basic business rules:
 ## Postman Collection
 
 The Postman collection for testing functionalities of the app and constraints mentioned above can be found in the root directory as a JSON file which can be imported into Postman, `BookLendingAPI.postman_collection.json`. 
-<img width="1308" alt="Screenshot 2023-07-15 at 23 26 35" src="https://github.com/rburaksaritas/allianz/assets/86561984/e10f706a-3d0e-4e64-b1bf-cd4b203f8fca">
+<img width="1306" alt="Screenshot 2023-07-17 at 09 17 01" src="https://github.com/rburaksaritas/allianz/assets/86561984/5f48a52b-5c9f-433f-b162-b6e5d3599534">
+
 
 
 
