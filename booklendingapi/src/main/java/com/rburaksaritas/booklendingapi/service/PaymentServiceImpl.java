@@ -74,6 +74,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment updatePayment(Long paymentId, Payment payment) {
+        if (payment == null || payment.getUser() == null || payment.getBook() == null || payment.getCard() == null) {
+            throw new IllegalArgumentException("Payment, User, Book, or Card cannot be null.");
+        }
+
         Payment existingPayment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment", "id", paymentId));
 

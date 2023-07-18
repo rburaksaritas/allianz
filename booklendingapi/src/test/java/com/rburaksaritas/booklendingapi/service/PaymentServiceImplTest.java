@@ -97,27 +97,58 @@ class PaymentServiceImplTest {
 
     @Test
     void PaymentService_Save_NonExistentBookThrowsException() {
-        Payment payment = new Payment();
+        // Create a user
+        User user = new User();
+        user.setMail("testuser@mail.com");
+
+        // Create a card
+        Card card = new Card();
+        card.setCardNumber("1234567890");
+
+        // Create a book
         Book book = new Book();
         book.setIsbn("1234");
-        payment.setBook(book);
 
+        // Create a payment
+        Payment payment = new Payment();
+        payment.setUser(user);
+        payment.setBook(book);
+        payment.setCard(card);
+        payment.setStartDate("2017-12-12");
+        payment.setEndDate("2017-12-13");
+
+        // Make the repository return an empty Optional when searching for the book
         when(bookRepository.findById(anyString())).thenReturn(Optional.empty());
 
+        // Try to save the payment and expect a ResourceNotFoundException
         assertThrows(ResourceNotFoundException.class, () -> paymentService.savePayment(payment));
     }
+
 
     @Test
     void PaymentService_Save_NonExistentCardThrowsException() {
         Payment payment = new Payment();
+        User user = new User();
+        Book book = new Book();
         Card card = new Card();
-        card.setCardNumber("1111");
+        user.setMail("test@mail.com");
+        book.setIsbn("1234");
+        card.setCardNumber("non-existent-card-number");
+        card.setBalance(500);
+        book.setDailyCost(10);
+        payment.setUser(user);
+        payment.setBook(book);
         payment.setCard(card);
+        payment.setStartDate("2023-07-18");
+        payment.setEndDate("2023-07-20");
 
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
+        when(bookRepository.findById(anyString())).thenReturn(Optional.of(book));
         when(cardRepository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> paymentService.savePayment(payment));
     }
+
 
     @Test
     void PaymentService_Save_BookUnavailableThrowsException() {
@@ -173,24 +204,41 @@ class PaymentServiceImplTest {
     @Test
     void PaymentService_Update_ValidPaymentReturnsPayment() {
         Payment existingPayment = new Payment();
-        existingPayment.setId(1L);
+        Payment updatedPayment = new Payment();
+        User user = new User();
+        Book book = new Book();
+        Card card = new Card();
+
+        user.setMail("test@mail.com");
+        book.setIsbn("1234");
+        card.setCardNumber("1111");
+        card.setBalance(500);
+        book.setDailyCost(10);
+
+        existingPayment.setUser(user);
+        existingPayment.setBook(book);
+        existingPayment.setCard(card);
         existingPayment.setStartDate("2023-07-18");
         existingPayment.setEndDate("2023-07-20");
 
-        Payment updatedPayment = new Payment();
-        updatedPayment.setId(1L);
-        updatedPayment.setStartDate("2023-07-25");
-        updatedPayment.setEndDate("2023-07-27");
+        updatedPayment.setUser(user);
+        updatedPayment.setBook(book);
+        updatedPayment.setCard(card);
+        updatedPayment.setStartDate("2023-07-18");
+        updatedPayment.setEndDate("2023-07-22");
 
         when(paymentRepository.findById(anyLong())).thenReturn(Optional.of(existingPayment));
-        when(paymentRepository.save(any(Payment.class))).thenReturn(updatedPayment);
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
+        when(bookRepository.findById(anyString())).thenReturn(Optional.of(book));
+        when(cardRepository.findById(anyString())).thenReturn(Optional.of(card));
 
         Payment result = paymentService.updatePayment(1L, updatedPayment);
 
-        assertNotNull(result);
-        assertEquals("2023-07-25", result.getStartDate());
-        assertEquals("2023-07-27", result.getEndDate());
+        assertEquals("2023-07-18", result.getStartDate());
+        assertEquals("2023-07-22", result.getEndDate());
+        assertEquals(40.0, result.getCost());
     }
+
 
 
     @Test
@@ -200,7 +248,7 @@ class PaymentServiceImplTest {
 
         when(paymentRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> paymentService.updatePayment(1L, payment));
+        assertThrows(IllegalArgumentException.class, () -> paymentService.updatePayment(1L, payment));
     }
 
     @Test
@@ -219,7 +267,7 @@ class PaymentServiceImplTest {
 
         when(paymentRepository.findById(anyLong())).thenReturn(Optional.of(existingPayment));
 
-        assertThrows(IllegalArgumentException.class, () -> paymentService.updatePayment(1L, updatedPayment));
+        assertThrows(ResourceNotFoundException.class, () -> paymentService.updatePayment(1L, updatedPayment));
     }
 
     @Test
@@ -238,7 +286,7 @@ class PaymentServiceImplTest {
 
         when(paymentRepository.findById(anyLong())).thenReturn(Optional.of(existingPayment));
 
-        assertThrows(IllegalArgumentException.class, () -> paymentService.updatePayment(1L, updatedPayment));
+        assertThrows(ResourceNotFoundException.class, () -> paymentService.updatePayment(1L, updatedPayment));
     }
 
     @Test
