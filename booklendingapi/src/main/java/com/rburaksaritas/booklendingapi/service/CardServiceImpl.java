@@ -22,11 +22,18 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Card saveCard(Card card) {
+        if (card == null) {
+            throw new IllegalArgumentException("Card cannot be null");
+        }
         return cardRepository.save(card);
     }
 
     @Override
     public Card updateCard(String cardNumber, Double balance) {
+        if (cardNumber == null) {
+            throw new IllegalArgumentException("Card number cannot be null");
+        }
+
         Card existingCard = cardRepository.findById(cardNumber).orElse(null);
         if (existingCard != null) {
             existingCard.setBalance(balance);
@@ -35,8 +42,12 @@ public class CardServiceImpl implements CardService {
         return null;
     }
 
+
     @Override
     public void deleteCard(String cardNumber) {
+        if (cardNumber == null) {
+            throw new IllegalArgumentException("Card number cannot be null");
+        }
         cardRepository.deleteById(cardNumber);
     }
 }
