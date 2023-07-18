@@ -18,6 +18,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book saveBook(Book book) {
+        if (book == null || book.getTitle() == null || book.getAuthor() == null) {
+            throw new IllegalArgumentException("Invalid book");
+        }
         return bookRepository.save(book);
     }
 

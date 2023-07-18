@@ -36,7 +36,11 @@ class BookServiceImplTest {
     // Test 2: Save Book
     @Test
     public void BookService_Save_ReturnsSavedBook() {
+        String isbn = "978-3-16-148410-0";
         Book book = new Book();
+        book.setIsbn(isbn);
+        book.setTitle("Test Book");
+        book.setAuthor("Test Author");
         when(bookRepository.save(any(Book.class))).thenReturn(book);
         Book savedBook = bookService.saveBook(book);
         assertNotNull(savedBook);
@@ -84,7 +88,11 @@ class BookServiceImplTest {
     // Test 6: Save and verify the saved book
     @Test
     public void BookService_SaveAndVerify_VerifiesSavedBook() {
+        String isbn = "978-3-16-148410-0";
         Book book = new Book();
+        book.setIsbn(isbn);
+        book.setTitle("Test Book");
+        book.setAuthor("Test Author");
         when(bookRepository.save(any(Book.class))).thenAnswer(i -> i.getArguments()[0]);
         Book savedBook = bookService.saveBook(book);
         verify(bookRepository, times(1)).save(book);
