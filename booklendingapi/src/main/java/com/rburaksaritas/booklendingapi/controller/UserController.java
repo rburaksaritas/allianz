@@ -15,15 +15,13 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{mail}")
-    public ResponseEntity<String> getUser(@PathVariable String mail) {
+    public ResponseEntity<User> getUser(@PathVariable String mail) {
         try {
             User user = userService.getUser(mail);
             if (user != null) {
-                return ResponseEntity.ok("User with mail " + mail + ":\n" +
-                        "Password: " + user.getPassword() + "\n" +
-                        "Active: " + user.isActive() + "\n");
+                return ResponseEntity.ok(user);
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

@@ -1,6 +1,5 @@
 package com.rburaksaritas.booklendingapi.controller;
 
-import com.rburaksaritas.booklendingapi.exception.ResourceNotFoundException;
 import com.rburaksaritas.booklendingapi.model.User;
 import com.rburaksaritas.booklendingapi.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ public class UserControllerTest {
         user.setPassword("password");
         user.setActive(true);
         when(userService.getUser(anyString())).thenReturn(user);
-        ResponseEntity<String> response = userController.getUser("test@mail.com");
+        ResponseEntity<User> response = userController.getUser("test@mail.com");
         assertEquals(200, response.getStatusCodeValue());
     }
 
@@ -67,8 +66,8 @@ public class UserControllerTest {
 
     @Test
     void UserController_Get_UserDoesNotExist_ThrowsException() {
-        when(userService.getUser(anyString())).thenThrow(new ResourceNotFoundException("user", "mail", anyString()));
-        ResponseEntity<String> response = userController.getUser("test@mail.com");
+        when(userService.getUser(anyString())).thenReturn(null);
+        ResponseEntity<User> response = userController.getUser("test@mail.com");
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
@@ -85,14 +84,14 @@ public class UserControllerTest {
         user.setMail("test@mail.com");
         user.setPassword("password");
         user.setActive(true);
-        when(userService.updateUser(anyString(), any(User.class))).thenThrow(new ResourceNotFoundException("user", "mail", anyString()));
+        when(userService.updateUser(anyString(), any(User.class))).thenReturn(null);
         ResponseEntity<String> response = userController.updateUser("test@mail.com", user);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     void UserController_Delete_UserDoesNotExist_ThrowsException() {
-        when(userService.deleteUser(anyString())).thenThrow(new ResourceNotFoundException("user", "mail", anyString()));
+            when(userService.deleteUser(anyString())).thenReturn(false);
         ResponseEntity<String> response = userController.deleteUser("test@mail.com");
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
