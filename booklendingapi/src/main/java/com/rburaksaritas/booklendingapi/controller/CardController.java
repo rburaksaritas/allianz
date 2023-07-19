@@ -37,8 +37,12 @@ public class CardController {
     @PutMapping("/update/{cardNumber}")
     public ResponseEntity<Card> updateCardBalance(@PathVariable String cardNumber, @RequestParam double balance) {
         Card updatedCard = cardService.updateCard(cardNumber, balance);
+        if(updatedCard == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedCard);
     }
+
 
     @DeleteMapping("/delete/{cardNumber}")
     public ResponseEntity<String> deleteCard(@PathVariable String cardNumber) {
