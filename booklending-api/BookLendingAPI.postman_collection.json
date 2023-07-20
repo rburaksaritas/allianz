@@ -1,0 +1,351 @@
+{
+	"info": {
+		"_postman_id": "9b62b114-f3ef-4868-91d7-0a72a22f4892",
+		"name": "BookLendingAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28062816"
+	},
+	"item": [
+		{
+			"name": "Add user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"mail\":\"testdrive@allianz.co\",\n    \"password\":\"testPassword\",\n    \"active\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/user/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/user/testdrive@allianz.co"
+			},
+			"response": []
+		},
+		{
+			"name": "Update user",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\":\"testPass2\",\n    \"active\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/user/update/testdrive@allianz.co"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\":\"newpass123\",\n    \"active\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/user/delete/testdrive@allianz.co"
+			},
+			"response": []
+		},
+		{
+			"name": "Add book (expensive)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"isbn\":\"123124\",\n    \"author\":\"Apple\",\n    \"title\": \"Very Expensive Book\",\n    \"dailyCost\": 3000.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/book/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Add book (cheap)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"isbn\":\"123125\",\n    \"author\":\"Charity\",\n    \"title\": \"Very Cheap Book\",\n    \"dailyCost\": 0.10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/book/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Get book",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/book/123123"
+			},
+			"response": []
+		},
+		{
+			"name": "Update book",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"author\":\"New Author\",\n    \"title\": \"Cool Title\",\n    \"dailyCost\": 3.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/book/update/123123"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete book",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/book/delete/123124"
+			},
+			"response": []
+		},
+		{
+			"name": "Add card",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cardNumber\":\"111-111-112\",\n    \"balance\":3000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/card/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Get card",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/card/111-111-112"
+			},
+			"response": []
+		},
+		{
+			"name": "Update card",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/card/update/111-111-111?balance=300.00",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"card",
+						"update",
+						"111-111-111"
+					],
+					"query": [
+						{
+							"key": "balance",
+							"value": "300.00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete card",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/card/delete/111-111-112"
+			},
+			"response": []
+		},
+		{
+			"name": "Add payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"book\":{\n        \"isbn\": \"123123\"\n    },\n    \"user\":{\n        \"mail\": \"testdrive@allianz.co\"\n    },\n    \"card\":{\n        \"cardNumber\": \"111-111-111\"\n    },\n    \"startDate\":\"2023-07-14\",\n    \"endDate\":\"2023-07-24\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/payment/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Add payment - book unavailable",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"book\":{\n        \"isbn\": \"123123\"\n    },\n    \"user\":{\n        \"mail\": \"testdrive@allianz.co\"\n    },\n    \"card\":{\n        \"cardNumber\": \"111-111-111\"\n    },\n    \"startDate\":\"2023-07-14\",\n    \"endDate\":\"2023-07-24\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/payment/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Add payment - insufficient balance",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"book\":{\n        \"isbn\": \"123124\"\n    },\n    \"user\":{\n        \"mail\": \"testdrive@allianz.co\"\n    },\n    \"card\":{\n        \"cardNumber\": \"111-111-111\"\n    },\n    \"startDate\":\"2023-06-14\",\n    \"endDate\":\"2023-07-08\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/payment/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Get payment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/payment/7"
+			},
+			"response": []
+		},
+		{
+			"name": "Update payment",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": {\n        \"mail\": \"testdrive@allianz.co\"\n    },\n    \"book\": {\n        \"isbn\": \"123123\"\n    },\n    \"card\": {\n        \"cardNumber\": \"111-111-111\"\n    },\n    \"startDate\":\"2023-08-12\",\n    \"endDate\":\"2023-08-14\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/payment/update/7"
+			},
+			"response": []
+		},
+		{
+			"name": "Update payment - illegal field change",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": {\n        \"mail\": \"testdrive@allianz.co\"\n    },\n    \"book\": {\n        \"isbn\": \"123125\"\n    },\n    \"card\": {\n        \"cardNumber\": \"111-111-111\"\n    },\n    \"startDate\":\"2023-08-12\",\n    \"endDate\":\"2023-08-14\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/payment/update/7"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete payment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/payment/delete/1"
+			},
+			"response": []
+		}
+	]
+}
