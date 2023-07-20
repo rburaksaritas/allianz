@@ -2,6 +2,7 @@ package com.rburaksaritas.ordermanagementsystemapi.model;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -29,4 +30,12 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @Column(name = "timestamp", nullable = false)
+    private Date timestamp;
+
+    @PrePersist
+    protected void onCreate() {
+        this.timestamp = new Date();
+    }
 }
