@@ -1,2 +1,3 @@
 # allianz
-Allianz related work
+Allianz related projects. Java, Spring Framework (Spring Boot, Spring Data JPA, Spring Web), MySQL.
+
