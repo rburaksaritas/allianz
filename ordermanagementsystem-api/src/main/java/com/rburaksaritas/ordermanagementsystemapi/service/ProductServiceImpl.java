@@ -1,11 +1,13 @@
 package com.rburaksaritas.ordermanagementsystemapi.service;
 
 import com.rburaksaritas.ordermanagementsystemapi.dto.ProductDTO;
+import com.rburaksaritas.ordermanagementsystemapi.model.Category;
 import com.rburaksaritas.ordermanagementsystemapi.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,12 +38,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(Integer id, ProductDTO productDTO) {
+    public ProductDTO updateProduct(Integer id, String updatedName,
+                                    String updatedPrice, String updatedThumbnail,
+                                    String updatedDetail, Integer updatedCategoryId,
+                                    Integer newQuantity, Date newDate) {
         return null;
     }
 
     @Override
-    public void deleteProduct(Integer id) {
-
-    }
+    public void deleteProduct(Integer id) {}
 }
