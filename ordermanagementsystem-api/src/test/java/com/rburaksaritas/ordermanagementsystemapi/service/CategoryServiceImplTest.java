@@ -105,14 +105,16 @@ class CategoryServiceTests {
     public void CategoryService_UpdateCategory_ValidCategoryIdAndDTO_ReturnsUpdatedCategoryDTO() {
         // Arrange
         int categoryId = 1;
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setName("Updated Category");
+        String updatedName = "Updated Name";
+        String updatedDetails = "Updated Details";
+        Date updatedDate = new Date();
+        CategoryDTO categoryDTO = new CategoryDTO(categoryId, updatedName, updatedDetails, updatedDate);
         Category existingCategory = new Category(categoryId, "Test Category", "Test Details", new Date());
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
         when(categoryRepository.save(any())).thenReturn(existingCategory);
 
         // Act
-        CategoryDTO updatedCategoryDTO = categoryService.updateCategory(categoryId, categoryDTO);
+        CategoryDTO updatedCategoryDTO = categoryService.updateCategory(categoryId, updatedName, updatedDetails, updatedDate);
 
         // Assert
         assertNotNull(updatedCategoryDTO);
@@ -129,14 +131,31 @@ class CategoryServiceTests {
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> categoryService.updateCategory(categoryId, categoryDTO));
+        assertThrows(ResourceNotFoundException.class, () -> categoryService.updateCategory(categoryId, "a", "a", new Date()));
+    }
+
+    @Test
+    public void CategoryService_UpdateCategory_DuplicateCategoryNameThrowsIllegalArgumentException() {
+        // Arrange
+        int categoryId = 1;
+        String updatedName = "Updated Name";
+        String updatedDetails = "Updated Details";
+        Date updatedDate = new Date();
+        CategoryDTO categoryDTO = new CategoryDTO(categoryId, updatedName, updatedDetails, updatedDate);
+        Category existingCategory = new Category(categoryId, "Test Category", "Test Details", new Date());
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
+        when(categoryRepository.save(any())).thenThrow(DataIntegrityViolationException.class);
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> categoryService.updateCategory(categoryId, updatedName, updatedDetails, updatedDate));
     }
 
     @Test
     public void CategoryService_Delete_ValidCategoryId_DeletesCategory() {
         // Arrange
         int categoryId = 1;
-
+        Category existingCategory = new Category(categoryId, "Test Category", "Test Details", new Date());
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
         // Act
         assertDoesNotThrow(() -> categoryService.deleteCategory(categoryId));
 
@@ -144,17 +163,25 @@ class CategoryServiceTests {
         verify(categoryRepository, times(1)).deleteById(categoryId);
     }
 
+    @Test
+    public void CategoryService_Delete_CategoryNotFoundThrowsResourceNotFoundException() {
+        // Arrange
+        int categoryId = 1;
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> categoryService.deleteCategory(categoryId));
+    }
 
     @Test
     public void CategoryService_Delete_AssociatedCategoryThrowsIllegalArgumentException() {
         // Arrange
         int categoryId = 1;
+        Category existingCategory = new Category(categoryId, "Test Category", "Test Details", new Date());
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
         doThrow(DataIntegrityViolationException.class).when(categoryRepository).deleteById(categoryId);
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> categoryService.deleteCategory(categoryId));
     }
-
-    // Add more test methods for other service methods...
-
 }
