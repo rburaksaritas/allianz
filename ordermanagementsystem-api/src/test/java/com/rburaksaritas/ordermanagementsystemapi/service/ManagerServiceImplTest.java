@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ManagerServiceImplTest {
+class ManagerServiceImplTests {
 
     private ManagerService managerService;
     private ManagerRepository managerRepository;
