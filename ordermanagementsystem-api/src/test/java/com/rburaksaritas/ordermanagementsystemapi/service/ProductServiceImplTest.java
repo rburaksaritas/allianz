@@ -38,7 +38,7 @@ class ProductServiceTests {
 
         productRepository = mock(ProductRepository.class);
         productModelMapper = new ModelMapper();
-        productService = new ProductServiceImpl(productRepository, productModelMapper);
+        productService = new ProductServiceImpl(productRepository, categoryRepository, productModelMapper);
     }
 
     // ProductService Tests
@@ -143,7 +143,7 @@ class ProductServiceTests {
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category)); // Mock category fetch
 
         // Act
-        ProductDTO updatedProductDTO = productService.updateProduct(productId, updatedName, updatedPrice.toString(), updatedThumbnail, updatedDetail, categoryId, newQuantity, newDate);
+        ProductDTO updatedProductDTO = productService.updateProduct(productId, updatedName, updatedPrice, updatedThumbnail, updatedDetail, categoryId, newQuantity, newDate);
 
         // Assert
         assertNotNull(updatedProductDTO);
@@ -181,20 +181,7 @@ class ProductServiceTests {
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> productService.updateProduct(productId, updatedName, updatedPrice.toString(), updatedThumbnail, updatedDetail, categoryId, newQuantity, newDate));
-    }
-
-    @Test
-    public void ProductService_Delete_ValidProductId_DeletesProduct() {
-        // Arrange
-        int productId = 1;
-        Product existingProduct = new Product(productId, "Test Product", 10.0, "thumbnail", "Test Details", new Category(), 100, new Date());
-        when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
-        // Act
-        assertDoesNotThrow(() -> productService.deleteProduct(productId));
-
-        // Assert
-        verify(productRepository, times(1)).deleteById(productId);
+        assertThrows(ResourceNotFoundException.class, () -> productService.updateProduct(productId, updatedName, updatedPrice, updatedThumbnail, updatedDetail, categoryId, newQuantity, newDate));
     }
 
     @Test
@@ -226,7 +213,20 @@ class ProductServiceTests {
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> productService.updateProduct(productId, updatedName, updatedPrice.toString(), updatedThumbnail, updatedDetail, categoryId, newQuantity, newDate));
+        assertThrows(ResourceNotFoundException.class, () -> productService.updateProduct(productId, updatedName, updatedPrice, updatedThumbnail, updatedDetail, categoryId, newQuantity, newDate));
+    }
+
+    @Test
+    public void ProductService_Delete_ValidProductId_DeletesProduct() {
+        // Arrange
+        int productId = 1;
+        Product existingProduct = new Product(productId, "Test Product", 10.0, "thumbnail", "Test Details", new Category(), 100, new Date());
+        when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
+        // Act
+        assertDoesNotThrow(() -> productService.deleteProduct(productId));
+
+        // Assert
+        verify(productRepository, times(1)).deleteById(productId);
     }
 
     @Test

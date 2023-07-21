@@ -11,7 +11,7 @@ public interface ProductService {
     ProductDTO getProductById(Integer id);
     ProductDTO saveProduct(ProductDTO productDTO);
     public ProductDTO updateProduct(Integer id, String updatedName,
-                                    String updatedPrice, String updatedThumbnail,
+                                    Double updatedPrice, String updatedThumbnail,
                                     String updatedDetail, Integer updatedCategoryId,
                                     Integer newQuantity, Date newDate);
     void deleteProduct(Integer id);
