@@ -1,0 +1,151 @@
+package com.rburaksaritas.ordermanagementsystemapi.service;
+
+import com.rburaksaritas.ordermanagementsystemapi.dto.CustomerDTO;
+import com.rburaksaritas.ordermanagementsystemapi.dto.ProductDTO;
+import com.rburaksaritas.ordermanagementsystemapi.dto.ReviewDTO;
+import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
+import com.rburaksaritas.ordermanagementsystemapi.model.Customer;
+import com.rburaksaritas.ordermanagementsystemapi.model.Product;
+import com.rburaksaritas.ordermanagementsystemapi.model.Review;
+import com.rburaksaritas.ordermanagementsystemapi.repository.ReviewRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class ReviewServiceTests {
+
+    private ReviewService reviewService;
+    private ReviewRepository reviewRepository;
+    private ModelMapper modelMapper;
+
+    @BeforeEach
+    public void setUp() {
+        reviewRepository = mock(ReviewRepository.class);
+        modelMapper = new ModelMapper();
+        reviewService = new ReviewServiceImpl(reviewRepository, modelMapper);
+    }
+
+    // ReviewService Tests
+    @Test
+    public void ReviewService_GetAll_ReturnsAllReviews() {
+        // Arrange
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(new Review(1, "Review 1", 5, new Customer(), new Product(), new Date()));
+        reviews.add(new Review(2, "Review 2", 4, new Customer(), new Product(), new Date()));
+        when(reviewRepository.findAll()).thenReturn(reviews);
+
+        // Act
+        List<ReviewDTO> reviewDTOList = reviewService.getAllReviews();
+
+        // Assert
+        assertNotNull(reviewDTOList);
+        assertEquals(reviews.size(), reviewDTOList.size());
+    }
+
+    @Test
+    public void ReviewService_GetById_ValidReviewReturnsReview() {
+        // Arrange
+        int reviewId = 1;
+        Review review = new Review(reviewId, "Test Review", 4, new Customer(), new Product(), new Date());
+        when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
+
+        // Act
+        ReviewDTO reviewDTO = reviewService.getReviewById(reviewId);
+
+        // Assert
+        assertNotNull(reviewDTO);
+        assertEquals(review.getId(), reviewDTO.getId());
+        assertEquals(review.getDescription(), reviewDTO.getDescription());
+    }
+
+    @Test
+    public void ReviewService_GetById_ReviewNotFoundThrowsResourceNotFoundException() {
+        // Arrange
+        int reviewId = 1;
+        when(reviewRepository.findById(reviewId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.getReviewById(reviewId));
+    }
+
+    @Test
+    public void ReviewService_SaveReview_ValidReviewDTO_ReturnsSavedReviewDTO() {
+        // Arrange
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setDescription("Test Review");
+        reviewDTO.setStar(4);
+        Review review = modelMapper.map(reviewDTO, Review.class);
+        when(reviewRepository.save(review)).thenReturn(review);
+
+        // Act
+        ReviewDTO savedReviewDTO = reviewService.saveReview(reviewDTO);
+
+        // Assert
+        assertNotNull(savedReviewDTO);
+        assertEquals(review.getId(), savedReviewDTO.getId());
+        assertEquals(review.getDescription(), savedReviewDTO.getDescription());
+    }
+
+    @Test
+    public void ReviewService_UpdateReview_ValidReviewIdAndData_ReturnsUpdatedReviewDTO() {
+        // Arrange
+        int reviewId = 1;
+        int updatedStar = 5;
+        String updatedDescription = "Updated Review";
+        ReviewDTO reviewDTO = new ReviewDTO(reviewId, updatedDescription, updatedStar, new CustomerDTO(), new ProductDTO(), new Date());
+        Review existingReview = new Review(reviewId, "Test Review", 4, new Customer(), new Product(), new Date());
+        when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(existingReview));
+        when(reviewRepository.save(any())).thenReturn(existingReview);
+
+        // Act
+        ReviewDTO updatedReviewDTO = reviewService.updateReview(reviewId, updatedStar, updatedDescription);
+
+        // Assert
+        assertNotNull(updatedReviewDTO);
+        assertEquals(reviewId, updatedReviewDTO.getId());
+        assertEquals(updatedDescription, updatedReviewDTO.getDescription());
+    }
+
+    @Test
+    public void ReviewService_UpdateReview_ReviewNotFoundThrowsResourceNotFoundException() {
+        // Arrange
+        int reviewId = 1;
+        int updatedStar = 5;
+        String updatedDescription = "Updated Review";
+        when(reviewRepository.findById(reviewId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.updateReview(reviewId, updatedStar, updatedDescription));
+    }
+
+    @Test
+    public void ReviewService_Delete_ValidReviewId_DeletesReview() {
+        // Arrange
+        int reviewId = 1;
+        Review existingReview = new Review(reviewId, "Test Review", 4, new Customer(), new Product(), new Date());
+        when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(existingReview));
+        // Act
+        assertDoesNotThrow(() -> reviewService.deleteReview(reviewId));
+
+        // Assert
+        verify(reviewRepository, times(1)).deleteById(reviewId);
+    }
+
+    @Test
+    public void ReviewService_Delete_ReviewNotFoundThrowsResourceNotFoundException() {
+        // Arrange
+        int reviewId = 1;
+        when(reviewRepository.findById(reviewId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.deleteReview(reviewId));
+    }
+}

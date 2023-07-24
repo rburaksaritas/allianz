@@ -8,6 +8,6 @@ public interface ReviewService {
     List<ReviewDTO> getAllReviews();
     ReviewDTO getReviewById(Integer id);
     ReviewDTO saveReview(ReviewDTO reviewDTO);
-    ReviewDTO updateReview(Integer id, ReviewDTO reviewDTO);
+    ReviewDTO updateReview(Integer id, Integer updatedStar, String updatedDetails);
     void deleteReview(Integer id);
 }

@@ -36,7 +36,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewDTO updateReview(Integer id, ReviewDTO reviewDTO) {
+    public ReviewDTO updateReview(Integer id, Integer updatedStar, String updatedDescription) {
         return null;
     }
 
