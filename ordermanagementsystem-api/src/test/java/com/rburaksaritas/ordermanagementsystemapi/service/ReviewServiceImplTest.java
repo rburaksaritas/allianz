@@ -4,9 +4,12 @@ import com.rburaksaritas.ordermanagementsystemapi.dto.CustomerDTO;
 import com.rburaksaritas.ordermanagementsystemapi.dto.ProductDTO;
 import com.rburaksaritas.ordermanagementsystemapi.dto.ReviewDTO;
 import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
+import com.rburaksaritas.ordermanagementsystemapi.model.Category;
 import com.rburaksaritas.ordermanagementsystemapi.model.Customer;
 import com.rburaksaritas.ordermanagementsystemapi.model.Product;
 import com.rburaksaritas.ordermanagementsystemapi.model.Review;
+import com.rburaksaritas.ordermanagementsystemapi.repository.CustomerRepository;
+import com.rburaksaritas.ordermanagementsystemapi.repository.ProductRepository;
 import com.rburaksaritas.ordermanagementsystemapi.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,15 +25,20 @@ import static org.mockito.Mockito.*;
 
 class ReviewServiceTests {
 
+    private ProductRepository productRepository;
+    private CustomerRepository customerRepository;
     private ReviewService reviewService;
     private ReviewRepository reviewRepository;
     private ModelMapper modelMapper;
 
     @BeforeEach
     public void setUp() {
+        productRepository = mock(ProductRepository.class);
+        customerRepository = mock(CustomerRepository.class);
         reviewRepository = mock(ReviewRepository.class);
+
         modelMapper = new ModelMapper();
-        reviewService = new ReviewServiceImpl(reviewRepository, modelMapper);
+        reviewService = new ReviewServiceImpl(productRepository, customerRepository, reviewRepository, modelMapper);
     }
 
     // ReviewService Tests
@@ -147,5 +155,97 @@ class ReviewServiceTests {
 
         // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> reviewService.deleteReview(reviewId));
+    }
+
+    @Test
+    public void ReviewService_GetReviewsOfProduct_ValidProductId_ReturnsReviewsOfProduct() {
+        // Arrange
+        int productId = 1;
+        Product product = new Product();
+        product.setId(productId);
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(new Review(1, "Review 1", 5, new Customer(), product, new Date()));
+        reviews.add(new Review(2, "Review 2", 4, new Customer(), product, new Date()));
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(reviewRepository.findByProductId(productId)).thenReturn(reviews);
+
+        // Act
+        List<ReviewDTO> reviewDTOList = reviewService.getReviewsOfProduct(productId);
+
+        // Assert
+        assertNotNull(reviewDTOList);
+        assertEquals(reviews.size(), reviewDTOList.size());
+    }
+
+    @Test
+    public void ReviewService_GetReviewsOfProduct_InvalidProductIdThrowsResourceNotFoundException() {
+        // Arrange
+        int productId = 1;
+        when(productRepository.findById(productId)).thenThrow(new ResourceNotFoundException("product", "id", productId));
+        when(reviewRepository.findByProductId(productId)).thenReturn(new ArrayList<>());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.getReviewsOfProduct(productId));
+    }
+
+    @Test
+    public void ReviewService_GetAverageReviewOfProduct_ValidProductId_ReturnsAverageReview() {
+        // Arrange
+        int productId = 1;
+        Product product1 = new Product();
+        Product product2 = new Product();
+        product1.setId(productId);
+        product2.setId(productId);
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(new Review(1, "Review 1", 5, new Customer(), product1, new Date()));
+        reviews.add(new Review(2, "Review 2", 4, new Customer(), product2, new Date()));
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product1));
+        when(reviewRepository.findByProductId(productId)).thenReturn(reviews);
+
+        // Act
+        double averageReview = reviewService.getAverageReviewOfProduct(productId);
+
+        // Assert
+        assertEquals(4.5, averageReview);
+    }
+
+    @Test
+    public void ReviewService_GetAverageReviewOfProduct_InvalidProductIdThrowsResourceNotFoundException() {
+        // Arrange
+        int productId = 1;
+        when(reviewRepository.findByProductId(productId)).thenReturn(new ArrayList<>());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.getAverageReviewOfProduct(productId));
+    }
+
+    @Test
+    public void ReviewService_GetReviewsOfCustomer_ValidCustomerId_ReturnsReviewsOfCustomer() {
+        // Arrange
+        int customerId = 1;
+        Customer customer = new Customer();
+        customer.setId(customerId);
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(new Review(1, "Review 1", 5, customer, new Product(), new Date()));
+        reviews.add(new Review(2, "Review 2", 4, customer, new Product(), new Date()));
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+        when(reviewRepository.findByCustomerId(customerId)).thenReturn(reviews);
+
+        // Act
+        List<ReviewDTO> reviewDTOList = reviewService.getReviewsOfCustomer(customerId);
+
+        // Assert
+        assertNotNull(reviewDTOList);
+        assertEquals(reviews.size(), reviewDTOList.size());
+    }
+
+    @Test
+    public void ReviewService_GetReviewsOfCustomer_InvalidCustomerIdThrowsResourceNotFoundException() {
+        // Arrange
+        int customerId = 1;
+        when(reviewRepository.findByCustomerId(customerId)).thenReturn(new ArrayList<>());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.getReviewsOfCustomer(customerId));
     }
 }

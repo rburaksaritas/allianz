@@ -10,4 +10,11 @@ public interface ReviewService {
     ReviewDTO saveReview(ReviewDTO reviewDTO);
     ReviewDTO updateReview(Integer id, Integer updatedStar, String updatedDetails);
     void deleteReview(Integer id);
+
+    double getAverageReviewOfProduct(Integer productId);
+
+    List<ReviewDTO> getReviewsOfCustomer(Integer customerId);
+
+    List<ReviewDTO> getReviewsOfProduct(Integer productId);
+
 }
