@@ -13,7 +13,7 @@ public class OrderDTO {
     private Integer id;
     private CustomerDTO customer;
     private ProductDTO product;
-    private Integer productQuantity;
+    private Integer quantity;
     private Date orderDate;
     private Date deliveryDate;
     private String status;

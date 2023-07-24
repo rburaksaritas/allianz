@@ -25,8 +25,8 @@ public class Order {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "product_quantity", nullable = false)
-    private Integer productQuantity;
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
 
     @Column(name = "order_date", nullable = false, updatable = false)
     private Date orderDate;

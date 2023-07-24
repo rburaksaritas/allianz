@@ -61,7 +61,7 @@ class OrderServiceTests {
         // Assert
         assertNotNull(orderDTO);
         assertEquals(order.getId(), orderDTO.getId());
-        assertEquals(order.getProductQuantity(), orderDTO.getProductQuantity());
+        assertEquals(order.getQuantity(), orderDTO.getQuantity());
     }
 
     @Test
@@ -78,7 +78,7 @@ class OrderServiceTests {
     public void OrderService_SaveOrder_ValidOrderDTO_ReturnsSavedOrderDTO() {
         // Arrange
         OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setProductQuantity(2);
+        orderDTO.setQuantity(2);
         Order order = modelMapper.map(orderDTO, Order.class);
         when(orderRepository.save(order)).thenReturn(order);
 
@@ -88,7 +88,7 @@ class OrderServiceTests {
         // Assert
         assertNotNull(savedOrderDTO);
         assertEquals(order.getId(), savedOrderDTO.getId());
-        assertEquals(order.getProductQuantity(), savedOrderDTO.getProductQuantity());
+        assertEquals(order.getQuantity(), savedOrderDTO.getQuantity());
     }
 
     @Test
