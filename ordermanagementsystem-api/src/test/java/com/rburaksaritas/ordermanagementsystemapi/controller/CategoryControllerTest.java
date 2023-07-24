@@ -164,7 +164,7 @@ class CategoryControllerTests {
         ResponseEntity<Void> responseEntity = categoryController.deleteCategory(categoryId);
 
         // Assert
-        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     @Test
