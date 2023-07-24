@@ -40,5 +40,6 @@ public class Order {
     @PrePersist
     protected void onCreate() {
         this.orderDate = new Date();
+        this.status = "Created";
     }
 }
