@@ -16,6 +16,10 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
     @GetMapping("/get")
     public ResponseEntity<List<CategoryDTO>> getAllCategories(){
         return null;
@@ -27,7 +31,7 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CategoryDTO> addCategory(){
+    public ResponseEntity<CategoryDTO> addCategory(CategoryDTO newCategory){
         return null;
     }
 
