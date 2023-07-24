@@ -1,6 +1,7 @@
 package com.rburaksaritas.ordermanagementsystemapi.service;
 
 import com.rburaksaritas.ordermanagementsystemapi.dto.OrderDTO;
+import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
 import com.rburaksaritas.ordermanagementsystemapi.model.Order;
 import com.rburaksaritas.ordermanagementsystemapi.repository.OrderRepository;
 import org.modelmapper.ModelMapper;
@@ -33,21 +34,48 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO getOrderById(Integer id) {
-        return null;
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
+        return modelMapper.map(order, OrderDTO.class);
     }
 
     @Override
     public OrderDTO saveOrder(OrderDTO orderDTO) {
-        return null;
+        Order order = modelMapper.map(orderDTO, Order.class);
+        try {
+            Order savedOrder = orderRepository.save(order);
+            return modelMapper.map(savedOrder, OrderDTO.class);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to save the order.");
+        }
     }
 
     @Override
     public OrderDTO updateOrder(Integer id, Date deliveryDate, String status) {
-        return null;
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
+
+        try {
+            // Update the fields
+            order.setDeliveryDate(deliveryDate);
+            order.setStatus(status);
+
+            orderRepository.save(order);
+            return modelMapper.map(order, OrderDTO.class);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to update the order: " + e.getMessage());
+        }
     }
+
 
     @Override
     public void deleteOrder(Integer id) {
-
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
+        try {
+            orderRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to delete the order: " + e.getMessage());
+        }
     }
 }
