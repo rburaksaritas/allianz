@@ -1,6 +1,7 @@
 package com.rburaksaritas.ordermanagementsystemapi.controller;
 
 import com.rburaksaritas.ordermanagementsystemapi.dto.ReviewDTO;
+import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
 import com.rburaksaritas.ordermanagementsystemapi.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,37 +17,57 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @Autowired
-    public ReviewController(ReviewService reviewService){
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 
-    // TODO: Implement controller methods based on tests
     @GetMapping("/get")
     public ResponseEntity<List<ReviewDTO>> getAllReviews() {
-        return null;
+        List<ReviewDTO> reviews = reviewService.getAllReviews();
+        try{
+            return new ResponseEntity<>(reviews, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<ReviewDTO> getReviewById(@PathVariable Integer id) {
-        return null;
+        ReviewDTO review = reviewService.getReviewById(id);
+        if (review != null) {
+            return new ResponseEntity<>(review, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/add")
     public ResponseEntity<ReviewDTO> addReview(@RequestBody ReviewDTO reviewDTO) {
-        return null;
+        ReviewDTO savedReview = reviewService.saveReview(reviewDTO);
+        return new ResponseEntity<>(savedReview, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ReviewDTO> updateReview(
             @PathVariable Integer id,
-            @RequestParam Integer updatedStar,
-            @RequestParam String updatedDescription
+            @RequestParam Integer star,
+            @RequestParam String description
     ) {
-        return null;
+        try {
+            ReviewDTO updatedReview = reviewService.updateReview(id, star, description);
+            return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable Integer id) {
-        return null;
+        try {
+            reviewService.deleteReview(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
