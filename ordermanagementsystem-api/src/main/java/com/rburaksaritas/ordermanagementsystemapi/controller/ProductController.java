@@ -1,14 +1,15 @@
 package com.rburaksaritas.ordermanagementsystemapi.controller;
 
 import com.rburaksaritas.ordermanagementsystemapi.dto.ProductDTO;
+import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
 import com.rburaksaritas.ordermanagementsystemapi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/product")
@@ -17,24 +18,38 @@ public class ProductController {
     private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService){
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
-    // TODO: Implement controller methods based on tests
     @GetMapping("/get")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return null;
+        List<ProductDTO> products = productService.getAllProducts();
+        try{
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Integer id) {
-        return null;
+        ProductDTO product = productService.getProductById(id);
+        if (product != null) {
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/add")
     public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO) {
-        return null;
+        try {
+            ProductDTO savedProduct = productService.saveProduct(productDTO);
+            return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/update/{id}")
@@ -43,16 +58,29 @@ public class ProductController {
             @RequestParam String updatedName,
             @RequestParam Double updatedPrice,
             @RequestParam String updatedThumbnail,
-            @RequestParam String updatedDetail,
-            @RequestParam Integer updatedCategoryId,
-            @RequestParam Integer newQuantity,
-            @RequestParam Date newDate
+            @RequestParam String updatedDetails,
+            @RequestParam Integer categoryId,
+            @RequestParam Integer updatedQuantity,
+            @RequestParam Date updatedTimestamp
     ) {
-        return null;
+        try {
+            ProductDTO updatedProduct = productService.updateProduct(id, updatedName, updatedPrice, updatedThumbnail,
+                    updatedDetails, categoryId, updatedQuantity, updatedTimestamp);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
-        return null;
+        try {
+            productService.deleteProduct(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
