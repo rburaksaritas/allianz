@@ -20,12 +20,10 @@ class CustomerControllerTests {
 
     private CustomerController customerController;
     private CustomerService customerService;
-    private ModelMapper modelMapper;
 
     @BeforeEach
     public void setUp() {
         customerService = mock(CustomerService.class);
-        modelMapper = new ModelMapper();
         customerController = new CustomerController(customerService);
     }
 
