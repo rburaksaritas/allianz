@@ -1,6 +1,8 @@
 package com.rburaksaritas.ordermanagementsystemapi.controller;
 
 import com.rburaksaritas.ordermanagementsystemapi.model.Manager;
+import com.rburaksaritas.ordermanagementsystemapi.service.ManagerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/manager")
 public class ManagerController {
+
+    private final ManagerService managerService;
+
+    @Autowired
+    public ManagerController(ManagerService managerService){
+        this.managerService = managerService;
+    }
 
     // TODO: Implement controller methods based on tests
     @GetMapping("/get")

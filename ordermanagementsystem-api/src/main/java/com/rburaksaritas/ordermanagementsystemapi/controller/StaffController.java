@@ -1,6 +1,8 @@
 package com.rburaksaritas.ordermanagementsystemapi.controller;
 
 import com.rburaksaritas.ordermanagementsystemapi.dto.StaffDTO;
+import com.rburaksaritas.ordermanagementsystemapi.service.StaffService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,13 @@ import java.util.List;
 @RequestMapping("/staff")
 public class StaffController {
 
+    private final StaffService staffService;
+
+    @Autowired
+    public StaffController(StaffService staffService){
+        this.staffService = staffService;
+    }
+    
     // TODO: Implement controller methods based on tests
     @GetMapping("/get")
     public ResponseEntity<List<StaffDTO>> getAllStaff() {

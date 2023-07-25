@@ -1,6 +1,8 @@
 package com.rburaksaritas.ordermanagementsystemapi.controller;
 
 import com.rburaksaritas.ordermanagementsystemapi.dto.ReviewDTO;
+import com.rburaksaritas.ordermanagementsystemapi.service.ReviewService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/review")
 public class ReviewController {
+
+    private final ReviewService reviewService;
+
+    @Autowired
+    public ReviewController(ReviewService reviewService){
+        this.reviewService = reviewService;
+    }
 
     // TODO: Implement controller methods based on tests
     @GetMapping("/get")

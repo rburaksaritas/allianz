@@ -1,6 +1,9 @@
 package com.rburaksaritas.ordermanagementsystemapi.controller;
 
 import com.rburaksaritas.ordermanagementsystemapi.dto.OrderDTO;
+import com.rburaksaritas.ordermanagementsystemapi.model.Order;
+import com.rburaksaritas.ordermanagementsystemapi.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +14,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
+
+    private final OrderService orderService;
+
+    @Autowired
+    public OrderController(OrderService orderService){
+        this.orderService = orderService;
+    }
 
     // TODO: Implement controller methods based on tests
     @GetMapping("/get")
