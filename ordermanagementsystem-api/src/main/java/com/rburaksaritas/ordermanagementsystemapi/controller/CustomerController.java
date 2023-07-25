@@ -1,7 +1,7 @@
 package com.rburaksaritas.ordermanagementsystemapi.controller;
 
 import com.rburaksaritas.ordermanagementsystemapi.dto.CustomerDTO;
-import com.rburaksaritas.ordermanagementsystemapi.service.CategoryService;
+import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
 import com.rburaksaritas.ordermanagementsystemapi.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,20 +21,34 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    // TODO: Implement controller methods based on tests
     @GetMapping("/get")
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
-        return null;
+        List<CustomerDTO> customers = customerService.getAllCustomers();
+        try {
+            return new ResponseEntity<>(customers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Integer id) {
-        return null;
+        CustomerDTO customer = customerService.getCustomerById(id);
+        if (customer != null) {
+            return new ResponseEntity<>(customer, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/add")
     public ResponseEntity<CustomerDTO> addCustomer(@RequestBody CustomerDTO customerDTO) {
-        return null;
+        try {
+            CustomerDTO savedCustomer = customerService.saveCustomer(customerDTO);
+            return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/update/{id}")
@@ -48,11 +62,24 @@ public class CustomerController {
             @RequestParam String updatedPassword,
             @RequestParam Double updatedWalletBalance
     ) {
-        return null;
+        try {
+            CustomerDTO updatedCustomer = customerService.updateCustomer(id, updatedName, updatedLocation,
+                    updatedPhone, updatedMail, updatedBirthDate, updatedPassword, updatedWalletBalance);
+            return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Integer id) {
-        return null;
+        try {
+            customerService.deleteCustomer(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
