@@ -5,11 +5,13 @@ import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundExce
 import com.rburaksaritas.ordermanagementsystemapi.model.Customer;
 import com.rburaksaritas.ordermanagementsystemapi.model.Order;
 import com.rburaksaritas.ordermanagementsystemapi.model.Product;
+import com.rburaksaritas.ordermanagementsystemapi.repository.CustomerRepository;
 import com.rburaksaritas.ordermanagementsystemapi.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,12 +25,14 @@ class OrderServiceTests {
     private OrderService orderService;
     private OrderRepository orderRepository;
     private ModelMapper modelMapper;
+    private CustomerRepository customerRepository;
 
     @BeforeEach
     public void setUp() {
         orderRepository = mock(OrderRepository.class);
         modelMapper = new ModelMapper();
-        orderService = new OrderServiceImpl(orderRepository, modelMapper);
+        customerRepository = mock(CustomerRepository.class);
+        orderService = new OrderServiceImpl(orderRepository, modelMapper, customerRepository);
     }
 
     // OrderService Tests
@@ -72,6 +76,26 @@ class OrderServiceTests {
 
         // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> orderService.getOrderById(orderId));
+    }
+
+    @Test
+    public void OrderService_GetOrdersOfCustomer_ReturnsOrders() {
+        // Arrange
+        List<Order> ordersOfCustomer = new ArrayList<>();
+        Integer customerId = 1;
+        Customer customer = new Customer(customerId, "name", "loc", "phone", "mail", "birth", "pass", 500.00, new Date());
+        ordersOfCustomer.add(new Order(1, customer, new Product(), 2, new Date(), null, "Pending"));
+        ordersOfCustomer.add(new Order(2, customer, new Product(), 1, new Date(), null, "Delivered"));
+
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+        when(orderRepository.findByCustomerId(customerId)).thenReturn(ordersOfCustomer);
+
+        // Act
+        List<OrderDTO> orderDTOList = orderService.getOrdersOfCustomer(customerId);
+
+        // Assert
+        assertNotNull(orderDTOList);
+        assertEquals(ordersOfCustomer.size(), orderDTOList.size());
     }
 
     @Test

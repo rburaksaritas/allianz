@@ -4,6 +4,7 @@ import com.rburaksaritas.ordermanagementsystemapi.dto.CustomerDTO;
 import com.rburaksaritas.ordermanagementsystemapi.dto.OrderDTO;
 import com.rburaksaritas.ordermanagementsystemapi.dto.ProductDTO;
 import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
+import com.rburaksaritas.ordermanagementsystemapi.service.CustomerService;
 import com.rburaksaritas.ordermanagementsystemapi.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,6 +76,24 @@ class OrderControllerTests {
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertNull(responseEntity.getBody());
+    }
+
+    @Test
+    void getOrdersOfCustomer_ReturnsOrdersSuccessfully() {
+        // Arrange
+        List<OrderDTO> expectedOrders = new ArrayList<>();
+        CustomerDTO customer = new CustomerDTO(1, "name", "loc", "phone", "mail", "birth", "pass", 500.00, new Date());
+        expectedOrders.add(new OrderDTO(1, customer, new ProductDTO(), 5, new Date(), null, "pending"));
+        expectedOrders.add(new OrderDTO(2, customer, new ProductDTO(), 3, new Date(), new Date(), "delivered"));
+        when(orderService.getOrdersOfCustomer(1)).thenReturn(expectedOrders);
+
+        // Act
+        ResponseEntity<List<OrderDTO>> responseEntity = orderController.getOrderOfCustomer(1);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(expectedOrders.size(), responseEntity.getBody().size());
     }
 
     @Test

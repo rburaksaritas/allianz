@@ -24,8 +24,8 @@ public class OrderController {
 
     @GetMapping("/get")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
-        List<OrderDTO> orders = orderService.getAllOrders();
         try{
+            List<OrderDTO> orders = orderService.getAllOrders();
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -39,6 +39,16 @@ public class OrderController {
             return new ResponseEntity<>(order, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/get/customer/{id}")
+    public ResponseEntity<List<OrderDTO>> getOrderOfCustomer(@PathVariable Integer customerId) {
+        try {
+            List<OrderDTO> orders = orderService.getOrdersOfCustomer(customerId);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
