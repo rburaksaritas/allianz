@@ -6,6 +6,7 @@ import com.rburaksaritas.ordermanagementsystemapi.model.Customer;
 import com.rburaksaritas.ordermanagementsystemapi.model.Product;
 import com.rburaksaritas.ordermanagementsystemapi.model.Review;
 import com.rburaksaritas.ordermanagementsystemapi.repository.CustomerRepository;
+import com.rburaksaritas.ordermanagementsystemapi.repository.OrderRepository;
 import com.rburaksaritas.ordermanagementsystemapi.repository.ProductRepository;
 import com.rburaksaritas.ordermanagementsystemapi.repository.ReviewRepository;
 import org.modelmapper.ModelMapper;
@@ -20,13 +21,15 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
+    private final OrderRepository orderRepository;
     private final ReviewRepository reviewRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ReviewServiceImpl(ProductRepository productRepository, CustomerRepository customerRepository, ReviewRepository reviewRepository, ModelMapper modelMapper) {
+    public ReviewServiceImpl(ProductRepository productRepository, CustomerRepository customerRepository, OrderRepository orderRepository, ReviewRepository reviewRepository, ModelMapper modelMapper) {
         this.productRepository = productRepository;
-        this. customerRepository = customerRepository;
+        this.customerRepository = customerRepository;
+        this.orderRepository = orderRepository;
         this.reviewRepository = reviewRepository;
         this.modelMapper = modelMapper;
     }
@@ -49,8 +52,18 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewDTO saveReview(ReviewDTO reviewDTO) {
         Review review = modelMapper.map(reviewDTO, Review.class);
-        Review savedReview = reviewRepository.save(review);
-        return modelMapper.map(savedReview, ReviewDTO.class);
+        int customerId = review.getCustomer().getId();
+        int productId = review.getProduct().getId();
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("customer", "id", customerId));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
+        if (orderRepository.existsByCustomerAndProduct(customer, product)){
+            Review savedReview = reviewRepository.save(review);
+            return modelMapper.map(savedReview, ReviewDTO.class);
+        } else {
+            throw new ResourceNotFoundException("order", "customer id & product id", customerId + " & " + productId);
+        }
     }
 
     @Override
