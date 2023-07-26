@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -88,7 +87,7 @@ class OrderServiceTests {
         ordersOfCustomer.add(new Order(2, customer, new Product(), 1, new Date(), null, "Delivered"));
 
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
-        when(orderRepository.findByCustomerId(customerId)).thenReturn(ordersOfCustomer);
+        when(orderRepository.findByCustomer(customer)).thenReturn(ordersOfCustomer);
 
         // Act
         List<OrderDTO> orderDTOList = orderService.getOrdersOfCustomer(customerId);

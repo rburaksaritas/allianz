@@ -14,6 +14,7 @@ import com.rburaksaritas.ordermanagementsystemapi.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.parameters.P;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -167,7 +168,7 @@ class ReviewServiceTests {
         reviews.add(new Review(1, "Review 1", 5, new Customer(), product, new Date()));
         reviews.add(new Review(2, "Review 2", 4, new Customer(), product, new Date()));
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-        when(reviewRepository.findByProductId(productId)).thenReturn(reviews);
+        when(reviewRepository.findByProduct(product)).thenReturn(reviews);
 
         // Act
         List<ReviewDTO> reviewDTOList = reviewService.getReviewsOfProduct(productId);
@@ -181,8 +182,8 @@ class ReviewServiceTests {
     public void ReviewService_GetReviewsOfProduct_InvalidProductIdThrowsResourceNotFoundException() {
         // Arrange
         int productId = 1;
+        List<Product> products = new ArrayList<>();
         when(productRepository.findById(productId)).thenThrow(new ResourceNotFoundException("product", "id", productId));
-        when(reviewRepository.findByProductId(productId)).thenReturn(new ArrayList<>());
 
         // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> reviewService.getReviewsOfProduct(productId));
@@ -200,7 +201,7 @@ class ReviewServiceTests {
         reviews.add(new Review(1, "Review 1", 5, new Customer(), product1, new Date()));
         reviews.add(new Review(2, "Review 2", 4, new Customer(), product2, new Date()));
         when(productRepository.findById(productId)).thenReturn(Optional.of(product1));
-        when(reviewRepository.findByProductId(productId)).thenReturn(reviews);
+        when(reviewRepository.findByProduct(product1)).thenReturn(reviews);
 
         // Act
         double averageReview = reviewService.getAverageReviewOfProduct(productId);
@@ -213,7 +214,8 @@ class ReviewServiceTests {
     public void ReviewService_GetAverageReviewOfProduct_InvalidProductIdThrowsResourceNotFoundException() {
         // Arrange
         int productId = 1;
-        when(reviewRepository.findByProductId(productId)).thenReturn(new ArrayList<>());
+        Product product = new Product();
+        when(reviewRepository.findByProduct(product)).thenReturn(new ArrayList<>());
 
         // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> reviewService.getAverageReviewOfProduct(productId));
@@ -229,7 +231,7 @@ class ReviewServiceTests {
         reviews.add(new Review(1, "Review 1", 5, customer, new Product(), new Date()));
         reviews.add(new Review(2, "Review 2", 4, customer, new Product(), new Date()));
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
-        when(reviewRepository.findByCustomerId(customerId)).thenReturn(reviews);
+        when(reviewRepository.findByCustomer(customer)).thenReturn(reviews);
 
         // Act
         List<ReviewDTO> reviewDTOList = reviewService.getReviewsOfCustomer(customerId);
@@ -243,7 +245,8 @@ class ReviewServiceTests {
     public void ReviewService_GetReviewsOfCustomer_InvalidCustomerIdThrowsResourceNotFoundException() {
         // Arrange
         int customerId = 1;
-        when(reviewRepository.findByCustomerId(customerId)).thenReturn(new ArrayList<>());
+        Customer customer = new Customer();
+        when(reviewRepository.findByCustomer(customer)).thenReturn(new ArrayList<>());
 
         // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> reviewService.getReviewsOfCustomer(customerId));
