@@ -76,7 +76,7 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewDTO> getReviewsOfProduct(Integer productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
-        List<Review> reviews = reviewRepository.findByProductId(productId);
+        List<Review> reviews = reviewRepository.findByProduct(product);
         return reviews.stream()
                 .map(review -> modelMapper.map(review, ReviewDTO.class))
                 .collect(Collectors.toList());
@@ -86,7 +86,7 @@ public class ReviewServiceImpl implements ReviewService {
     public double getAverageReviewOfProduct(Integer productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
-        List<Review> reviews = reviewRepository.findByProductId(productId);
+        List<Review> reviews = reviewRepository.findByProduct(product);
         return reviews.stream()
                 .mapToInt(Review::getStar)
                 .average()
@@ -97,7 +97,7 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewDTO> getReviewsOfCustomer(Integer customerId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("customer", "id", customerId));
-        List<Review> reviews = reviewRepository.findByCustomerId(customerId);
+        List<Review> reviews = reviewRepository.findByCustomer(customer);
         return reviews.stream()
                 .map(review -> modelMapper.map(review, ReviewDTO.class))
                 .collect(Collectors.toList());

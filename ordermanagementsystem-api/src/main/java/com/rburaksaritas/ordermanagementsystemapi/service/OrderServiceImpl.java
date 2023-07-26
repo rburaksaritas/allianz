@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDTO> getOrdersOfCustomer(Integer customerId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("customer", "id", customerId));
-        List<Order> orders = orderRepository.findByCustomerId(customerId);
+        List<Order> orders = orderRepository.findByCustomer(customer);
         return orders.stream()
                 .map(order -> modelMapper.map(order, OrderDTO.class))
                 .collect(Collectors.toList());
