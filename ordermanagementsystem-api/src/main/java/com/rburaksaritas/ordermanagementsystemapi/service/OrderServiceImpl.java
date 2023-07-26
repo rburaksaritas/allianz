@@ -1,5 +1,6 @@
 package com.rburaksaritas.ordermanagementsystemapi.service;
 
+import com.rburaksaritas.ordermanagementsystemapi.dto.CustomerDTO;
 import com.rburaksaritas.ordermanagementsystemapi.dto.OrderDTO;
 import com.rburaksaritas.ordermanagementsystemapi.dto.ReviewDTO;
 import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
@@ -65,6 +66,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = modelMapper.map(orderDTO, Order.class);
         validateOrder(order);
         try {
+            withdrawCost(order);
             Order savedOrder = orderRepository.save(order);
             return modelMapper.map(savedOrder, OrderDTO.class);
         } catch (Exception e) {
@@ -87,6 +89,20 @@ public class OrderServiceImpl implements OrderService {
         int quantity = order.getQuantity();
         if (balance < price*quantity) {
             throw new IllegalArgumentException("Insufficient wallet balance: " + balance + " required: " + price*quantity);
+        }
+    }
+
+    public void withdrawCost(Order order) {
+        Customer customer = order.getCustomer();
+        Product product = order.getProduct();
+        double balance = customer.getWalletBalance();
+        double totalPrice = product.getPrice() + order.getQuantity();
+
+        try {
+            customer.setWalletBalance(balance - totalPrice);
+            customerRepository.save(customer);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to withdraw cost from customer:" + e.getMessage());
         }
     }
 
