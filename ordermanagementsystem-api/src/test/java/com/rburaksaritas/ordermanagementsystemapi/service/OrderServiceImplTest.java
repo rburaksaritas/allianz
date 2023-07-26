@@ -7,6 +7,7 @@ import com.rburaksaritas.ordermanagementsystemapi.model.Order;
 import com.rburaksaritas.ordermanagementsystemapi.model.Product;
 import com.rburaksaritas.ordermanagementsystemapi.repository.CustomerRepository;
 import com.rburaksaritas.ordermanagementsystemapi.repository.OrderRepository;
+import com.rburaksaritas.ordermanagementsystemapi.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -25,13 +26,16 @@ class OrderServiceTests {
     private OrderRepository orderRepository;
     private ModelMapper modelMapper;
     private CustomerRepository customerRepository;
+    private ProductRepository productRepository;
 
     @BeforeEach
     public void setUp() {
         orderRepository = mock(OrderRepository.class);
         modelMapper = new ModelMapper();
         customerRepository = mock(CustomerRepository.class);
-        orderService = new OrderServiceImpl(orderRepository, modelMapper, customerRepository);
+        productRepository = mock(ProductRepository.class);
+
+        orderService = new OrderServiceImpl(orderRepository, modelMapper, customerRepository, productRepository);
     }
 
     // OrderService Tests

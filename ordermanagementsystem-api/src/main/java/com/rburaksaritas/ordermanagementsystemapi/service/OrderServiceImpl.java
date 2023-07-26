@@ -5,11 +5,14 @@ import com.rburaksaritas.ordermanagementsystemapi.dto.ReviewDTO;
 import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
 import com.rburaksaritas.ordermanagementsystemapi.model.Customer;
 import com.rburaksaritas.ordermanagementsystemapi.model.Order;
+import com.rburaksaritas.ordermanagementsystemapi.model.Product;
 import com.rburaksaritas.ordermanagementsystemapi.model.Review;
 import com.rburaksaritas.ordermanagementsystemapi.repository.OrderRepository;
 import com.rburaksaritas.ordermanagementsystemapi.repository.CustomerRepository;
+import com.rburaksaritas.ordermanagementsystemapi.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,12 +25,14 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
     private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, ModelMapper modelMapper, CustomerRepository customerRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, ModelMapper modelMapper, CustomerRepository customerRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.modelMapper = modelMapper;
         this.customerRepository = customerRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -58,11 +63,30 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO saveOrder(OrderDTO orderDTO) {
         Order order = modelMapper.map(orderDTO, Order.class);
+        validateOrder(order);
         try {
             Order savedOrder = orderRepository.save(order);
             return modelMapper.map(savedOrder, OrderDTO.class);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to save the order.");
+            throw new IllegalArgumentException("Failed to save the order: " + e.getMessage());
+        }
+    }
+
+    public void validateOrder(Order order) {
+        // Validate objects
+        int customerId = order.getCustomer().getId();
+        int productId = order.getProduct().getId();
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("customer", "id", customerId));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("product", "id", productId));
+
+        // Validate balance
+        double balance = customer.getWalletBalance();
+        double price = product.getPrice();
+        int quantity = order.getQuantity();
+        if (balance < price*quantity) {
+            throw new IllegalArgumentException("Insufficient wallet balance: " + balance + " required: " + price*quantity);
         }
     }
 
