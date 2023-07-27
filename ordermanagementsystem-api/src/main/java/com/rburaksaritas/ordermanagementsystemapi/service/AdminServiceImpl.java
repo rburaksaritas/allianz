@@ -1,5 +1,6 @@
 package com.rburaksaritas.ordermanagementsystemapi.service;
 
+import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
 import com.rburaksaritas.ordermanagementsystemapi.model.Admin;
 import com.rburaksaritas.ordermanagementsystemapi.repository.AdminRepository;
 import org.modelmapper.ModelMapper;
@@ -31,17 +32,23 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Admin saveAdmin(Admin adminDTO) {
-        return null;
+    public Admin saveAdmin(Admin admin) {
+        try {
+            return adminRepository.save(admin);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to save admin: " + e.getMessage());
+        }
     }
 
     @Override
-    public Admin updateAdmin(Integer id, Admin adminDTO) {
+    public Admin updateAdmin(Integer id, Admin adminDTO ) {
         return null;
     }
 
     @Override
     public void deleteAdmin(Integer id) {
-
+        Admin existingAdmin = adminRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("admin", "id", id));
+        adminRepository.deleteById(id);
     }
 }
