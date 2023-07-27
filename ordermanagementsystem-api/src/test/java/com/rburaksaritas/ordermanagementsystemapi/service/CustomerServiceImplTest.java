@@ -26,7 +26,7 @@ class CustomerServiceTests {
     public void setUp() {
         customerRepository = mock(CustomerRepository.class);
         modelMapper = new ModelMapper();
-        customerService = new CustomerServiceImpl(customerRepository, modelMapper);
+        customerService = new CustomerServiceImpl(customerRepository, modelMapper, null);
     }
 
     // CustomerService Tests

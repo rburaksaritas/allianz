@@ -26,7 +26,7 @@ class ManagerServiceImplTests {
     public void setUp() {
         managerRepository = mock(ManagerRepository.class);
         modelMapper = new ModelMapper();
-        managerService = new ManagerServiceImpl(managerRepository, modelMapper);
+        managerService = new ManagerServiceImpl(managerRepository, modelMapper, null);
     }
 
     // ManagerService Tests

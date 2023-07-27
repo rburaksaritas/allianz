@@ -6,6 +6,7 @@ import com.rburaksaritas.ordermanagementsystemapi.model.Customer;
 import com.rburaksaritas.ordermanagementsystemapi.repository.CustomerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,11 +19,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, ModelMapper modelMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, ModelMapper modelMapper, BCryptPasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -44,6 +47,8 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
         try {
+            String hashedPassword = passwordEncoder.encode(customer.getPassword());
+            customer.setPassword(hashedPassword);
             Customer savedCustomer = customerRepository.save(customer);
             return modelMapper.map(savedCustomer, CustomerDTO.class);
         } catch (Exception e) {

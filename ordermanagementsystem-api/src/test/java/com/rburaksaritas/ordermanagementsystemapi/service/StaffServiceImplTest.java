@@ -26,7 +26,7 @@ class StaffServiceTests {
     public void setUp() {
         staffRepository = mock(StaffRepository.class);
         modelMapper = new ModelMapper();
-        staffService = new StaffServiceImpl(staffRepository, modelMapper);
+        staffService = new StaffServiceImpl(staffRepository, modelMapper, null);
     }
 
     // StaffService Tests

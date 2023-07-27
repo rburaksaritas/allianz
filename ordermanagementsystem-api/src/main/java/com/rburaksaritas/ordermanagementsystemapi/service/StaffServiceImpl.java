@@ -6,6 +6,7 @@ import com.rburaksaritas.ordermanagementsystemapi.model.Staff;
 import com.rburaksaritas.ordermanagementsystemapi.repository.StaffRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,13 @@ public class StaffServiceImpl implements StaffService {
 
     private final StaffRepository staffRepository;
     private final ModelMapper modelMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public StaffServiceImpl(StaffRepository staffRepository, ModelMapper modelMapper) {
+    public StaffServiceImpl(StaffRepository staffRepository, ModelMapper modelMapper, BCryptPasswordEncoder passwordEncoder) {
         this.staffRepository = staffRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -41,6 +44,8 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public StaffDTO saveStaff(StaffDTO staffDTO) {
         Staff staff = modelMapper.map(staffDTO, Staff.class);
+        String hashedPassword = passwordEncoder.encode(staff.getPassword());
+        staff.setPassword(hashedPassword);
         Staff savedStaff = staffRepository.save(staff);
         return modelMapper.map(savedStaff, StaffDTO.class);
     }

@@ -6,6 +6,7 @@ import com.rburaksaritas.ordermanagementsystemapi.repository.ManagerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,11 +16,13 @@ public class ManagerServiceImpl implements ManagerService {
 
     private final ManagerRepository managerRepository;
     private final ModelMapper modelMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public ManagerServiceImpl(ManagerRepository managerRepository, ModelMapper modelMapper) {
+    public ManagerServiceImpl(ManagerRepository managerRepository, ModelMapper modelMapper, BCryptPasswordEncoder passwordEncoder) {
         this.managerRepository = managerRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -36,6 +39,8 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Manager saveManager(Manager manager) {
         try {
+            String hashedPassword = passwordEncoder.encode(manager.getPassword());
+            manager.setPassword(hashedPassword);
             return managerRepository.save(manager);
         } catch (Exception e) {
             throw new IllegalArgumentException("Failed to save the manager:" + e);
