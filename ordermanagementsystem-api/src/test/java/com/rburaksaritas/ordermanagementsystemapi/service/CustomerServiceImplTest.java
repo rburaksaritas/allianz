@@ -7,6 +7,7 @@ import com.rburaksaritas.ordermanagementsystemapi.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,12 +22,14 @@ class CustomerServiceTests {
     private CustomerService customerService;
     private CustomerRepository customerRepository;
     private ModelMapper modelMapper;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void setUp() {
         customerRepository = mock(CustomerRepository.class);
         modelMapper = new ModelMapper();
-        customerService = new CustomerServiceImpl(customerRepository, modelMapper, null);
+        passwordEncoder = new BCryptPasswordEncoder();
+        customerService = new CustomerServiceImpl(customerRepository, modelMapper, passwordEncoder);
     }
 
     // CustomerService Tests
@@ -85,7 +88,7 @@ class CustomerServiceTests {
         customerDTO.setWalletBalance(100.0);
 
         Customer customer = modelMapper.map(customerDTO, Customer.class);
-        when(customerRepository.save(customer)).thenReturn(customer);
+        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
         // Act
         CustomerDTO savedCustomerDTO = customerService.saveCustomer(customerDTO);

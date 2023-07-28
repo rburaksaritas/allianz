@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,12 +22,14 @@ class ManagerServiceImplTests {
     private ManagerService managerService;
     private ManagerRepository managerRepository;
     private ModelMapper modelMapper;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void setUp() {
         managerRepository = mock(ManagerRepository.class);
         modelMapper = new ModelMapper();
-        managerService = new ManagerServiceImpl(managerRepository, modelMapper, null);
+        passwordEncoder = new BCryptPasswordEncoder();
+        managerService = new ManagerServiceImpl(managerRepository, modelMapper, passwordEncoder);
     }
 
     // ManagerService Tests

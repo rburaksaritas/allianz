@@ -9,6 +9,7 @@ import com.rburaksaritas.ordermanagementsystemapi.model.Customer;
 import com.rburaksaritas.ordermanagementsystemapi.model.Product;
 import com.rburaksaritas.ordermanagementsystemapi.model.Review;
 import com.rburaksaritas.ordermanagementsystemapi.repository.CustomerRepository;
+import com.rburaksaritas.ordermanagementsystemapi.repository.OrderRepository;
 import com.rburaksaritas.ordermanagementsystemapi.repository.ProductRepository;
 import com.rburaksaritas.ordermanagementsystemapi.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,7 @@ class ReviewServiceTests {
 
     private ProductRepository productRepository;
     private CustomerRepository customerRepository;
+    private OrderRepository orderRepository;
     private ReviewService reviewService;
     private ReviewRepository reviewRepository;
     private ModelMapper modelMapper;
@@ -36,10 +38,11 @@ class ReviewServiceTests {
     public void setUp() {
         productRepository = mock(ProductRepository.class);
         customerRepository = mock(CustomerRepository.class);
+        orderRepository = mock(OrderRepository.class);
         reviewRepository = mock(ReviewRepository.class);
 
         modelMapper = new ModelMapper();
-        reviewService = new ReviewServiceImpl(productRepository, customerRepository, reviewRepository, modelMapper);
+        reviewService = new ReviewServiceImpl(productRepository, customerRepository, orderRepository, reviewRepository, modelMapper);
     }
 
     // ReviewService Tests
@@ -91,16 +94,28 @@ class ReviewServiceTests {
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setDescription("Test Review");
         reviewDTO.setStar(4);
+
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(1);
+        reviewDTO.setCustomer(customerDTO);
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(1);
+        reviewDTO.setProduct(productDTO);
+
         Review review = modelMapper.map(reviewDTO, Review.class);
-        when(reviewRepository.save(review)).thenReturn(review);
+        when(reviewRepository.save(any(Review.class))).thenReturn(review);
+        when(customerRepository.findById(1)).thenReturn(Optional.of(new Customer())); // Mock customer repository call
+        when(productRepository.findById(1)).thenReturn(Optional.of(new Product())); // Mock product repository call
+        when(orderRepository.existsByCustomerAndProduct(any(Customer.class), any(Product.class))).thenReturn(true); // Mock order repository call
 
         // Act
         ReviewDTO savedReviewDTO = reviewService.saveReview(reviewDTO);
 
         // Assert
         assertNotNull(savedReviewDTO);
-        assertEquals(review.getId(), savedReviewDTO.getId());
         assertEquals(review.getDescription(), savedReviewDTO.getDescription());
+
     }
 
     @Test

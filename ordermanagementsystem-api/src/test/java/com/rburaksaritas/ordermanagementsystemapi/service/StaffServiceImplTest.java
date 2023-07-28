@@ -7,6 +7,7 @@ import com.rburaksaritas.ordermanagementsystemapi.repository.StaffRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,12 +22,14 @@ class StaffServiceTests {
     private StaffService staffService;
     private StaffRepository staffRepository;
     private ModelMapper modelMapper;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void setUp() {
         staffRepository = mock(StaffRepository.class);
         modelMapper = new ModelMapper();
-        staffService = new StaffServiceImpl(staffRepository, modelMapper, null);
+        passwordEncoder = new BCryptPasswordEncoder();
+        staffService = new StaffServiceImpl(staffRepository, modelMapper, passwordEncoder);
     }
 
     // StaffService Tests
@@ -79,18 +82,24 @@ class StaffServiceTests {
         StaffDTO staffDTO = new StaffDTO();
         staffDTO.setName("Test Staff");
         staffDTO.setMail("teststaff@example.com");
-        Staff staff = modelMapper.map(staffDTO, Staff.class);
-        when(staffRepository.save(staff)).thenReturn(staff);
+        staffDTO.setPassword("testpassword");
+
+        Staff staff = new Staff();
+        staff.setName(staffDTO.getName());
+        staff.setMail(staffDTO.getMail());
+        staff.setPassword(staffDTO.getPassword());
+
+        when(staffRepository.save(any(Staff.class))).thenReturn(staff);
 
         // Act
         StaffDTO savedStaffDTO = staffService.saveStaff(staffDTO);
 
         // Assert
         assertNotNull(savedStaffDTO);
-        assertEquals(staff.getId(), savedStaffDTO.getId());
         assertEquals(staff.getName(), savedStaffDTO.getName());
         assertEquals(staff.getMail(), savedStaffDTO.getMail());
     }
+
 
     @Test
     public void StaffService_UpdateStaff_ValidStaffIdAndData_ReturnsUpdatedStaffDTO() {

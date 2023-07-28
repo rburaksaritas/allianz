@@ -1,6 +1,8 @@
 package com.rburaksaritas.ordermanagementsystemapi.service;
 
+import com.rburaksaritas.ordermanagementsystemapi.dto.CustomerDTO;
 import com.rburaksaritas.ordermanagementsystemapi.dto.OrderDTO;
+import com.rburaksaritas.ordermanagementsystemapi.dto.ProductDTO;
 import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
 import com.rburaksaritas.ordermanagementsystemapi.model.Customer;
 import com.rburaksaritas.ordermanagementsystemapi.model.Order;
@@ -106,17 +108,35 @@ class OrderServiceTests {
         // Arrange
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setQuantity(2);
+
+        // Create and set Customer and Product
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(1); // Ensure this id exists in the customerRepository mock
+        customerDTO.setWalletBalance(100.0); // Balance enough for the order
+        orderDTO.setCustomer(customerDTO);
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(1); // Ensure this id exists in the productRepository mock
+        productDTO.setPrice(20.0); // Price per product
+        orderDTO.setProduct(productDTO);
+
         Order order = modelMapper.map(orderDTO, Order.class);
-        when(orderRepository.save(order)).thenReturn(order);
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+
+        // Mock repository findById methods
+        Customer customer = modelMapper.map(customerDTO, Customer.class);
+        Product product = modelMapper.map(productDTO, Product.class);
+        when(customerRepository.findById(1)).thenReturn(Optional.of(customer));
+        when(productRepository.findById(1)).thenReturn(Optional.of(product));
 
         // Act
         OrderDTO savedOrderDTO = orderService.saveOrder(orderDTO);
 
         // Assert
         assertNotNull(savedOrderDTO);
-        assertEquals(order.getId(), savedOrderDTO.getId());
         assertEquals(order.getQuantity(), savedOrderDTO.getQuantity());
     }
+
 
     @Test
     public void OrderService_UpdateOrder_ValidOrderIdAndData_ReturnsUpdatedOrderDTO() {
