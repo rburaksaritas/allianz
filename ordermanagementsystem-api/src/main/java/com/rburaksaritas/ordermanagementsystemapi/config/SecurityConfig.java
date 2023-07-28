@@ -22,7 +22,7 @@ public class SecurityConfig extends AbstractHttpConfigurer<SecurityConfig, HttpS
         http
                 .csrf().disable()
                 .authorizeRequests(authorize -> authorize
-                        .antMatchers("/manager/add").permitAll()
+                        .antMatchers("/login").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
