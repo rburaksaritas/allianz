@@ -1,19 +1,11 @@
 package com.rburaksaritas.ordermanagementsystemapi.service;
 
-import com.rburaksaritas.ordermanagementsystemapi.dto.CustomerDTO;
-import com.rburaksaritas.ordermanagementsystemapi.dto.OrderDTO;
-import com.rburaksaritas.ordermanagementsystemapi.dto.ReviewDTO;
+import com.rburaksaritas.ordermanagementsystemapi.dto.*;
 import com.rburaksaritas.ordermanagementsystemapi.exception.ResourceNotFoundException;
-import com.rburaksaritas.ordermanagementsystemapi.model.Customer;
-import com.rburaksaritas.ordermanagementsystemapi.model.Order;
-import com.rburaksaritas.ordermanagementsystemapi.model.Product;
-import com.rburaksaritas.ordermanagementsystemapi.model.Review;
-import com.rburaksaritas.ordermanagementsystemapi.repository.OrderRepository;
-import com.rburaksaritas.ordermanagementsystemapi.repository.CustomerRepository;
-import com.rburaksaritas.ordermanagementsystemapi.repository.ProductRepository;
+import com.rburaksaritas.ordermanagementsystemapi.model.*;
+import com.rburaksaritas.ordermanagementsystemapi.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
