@@ -25,9 +25,13 @@
   align-items: center;
   justify-content: center;
 }
+.login-navlink {
+  display: contents;
+}
 .login-pasted-image {
   width: 218px;
   height: 56px;
+  text-decoration: none;
 }
 .login-right {
   gap: var(--dl-space-space-oneandhalfunits);

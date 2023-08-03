@@ -14,11 +14,13 @@ const Admin = (props) => {
       </Helmet>
       <header data-role="Header" className="admin-header">
         <div className="admin-container1">
-          <img
-            alt="allianzlogo"
-            src="/external/pastedimage-75g2.svg"
-            className="admin-pasted-image"
-          />
+          <Link to="/admin" className="admin-navlink">
+            <img
+              alt="allianzlogo"
+              src="/external/pastedimage-75g2.svg"
+              className="admin-pasted-image"
+            />
+          </Link>
           <div className="admin-container2">
             <div className="admin-nav">
               <nav className="admin-nav1">

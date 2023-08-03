@@ -67,6 +67,7 @@
 }
 .teleport-show {
   display: flex !important;
+  transform: translateY(0%) !important;
 }
 .button-main {
   gap: var(--dl-space-space-halfunit);

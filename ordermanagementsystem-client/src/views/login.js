@@ -14,11 +14,13 @@ const Login = (props) => {
       </Helmet>
       <header data-thq="thq-navbar" className="login-navbar">
         <div className="login-left">
-          <img
-            alt="allianzlogo"
-            src="/external/pastedimage-75g2.svg"
-            className="login-pasted-image"
-          />
+          <Link to="/" className="login-navlink">
+            <img
+              alt="allianzlogo"
+              src="/external/pastedimage-75g2.svg"
+              className="login-pasted-image"
+            />
+          </Link>
         </div>
         <div data-thq="thq-navbar-btn-group" className="login-right">
           <Link to="/" className="login-book button button-main">

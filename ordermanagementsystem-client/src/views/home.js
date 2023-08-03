@@ -19,6 +19,7 @@ const Home = (props) => {
               <img
                 alt="allianzlogo"
                 src="/external/pastedimage-75g2.svg"
+                id="main-logo"
                 className="home-pasted-image"
               />
             </Link>
@@ -86,11 +87,9 @@ const Home = (props) => {
                 user-friendly API.
               </p>
             </div>
-            <button className="home-login-button button button-main">
-              <Link to="/login" className="home-navlink1">
-                Login
-              </Link>
-            </button>
+            <Link to="/login" className="home-login-button button button-main">
+              <span>Login</span>
+            </Link>
           </div>
           <div className="home-image2">
             <img alt="image" src="/aztrasset%201.svg" className="home-image3" />
@@ -100,13 +99,13 @@ const Home = (props) => {
       </section>
       <section className="home-about">
         <div className="home-heading1">
-          <h2 className="home-text08">
-            <span className="home-text09">About the project</span>
+          <h2 className="home-text09">
+            <span className="home-text10">About the project</span>
             <br></br>
           </h2>
         </div>
         <div className="home-content1">
-          <span className="home-text11">
+          <span className="home-text12">
             <span>
               This is a Full-Stack Order Management System web application,
               developed by @rburaksaritas during the internship at Allianz
@@ -135,8 +134,8 @@ const Home = (props) => {
       </section>
       <section id="register" className="home-register">
         <div className="home-heading2">
-          <h2 className="home-text17">Register as a Customer now</h2>
-          <p className="home-text18">
+          <h2 className="home-text18">Register as a Customer now</h2>
+          <p className="home-text19">
             Access all products, and place your order with one click
           </p>
         </div>
@@ -170,7 +169,7 @@ const Home = (props) => {
               autoComplete="tel"
               className="input book-input"
             />
-            <label className="home-text19">Birth Date</label>
+            <label className="home-text20">Birth Date</label>
             <div className="home-birth-date">
               <input
                 type="date"
@@ -194,7 +193,7 @@ const Home = (props) => {
               className="input book-input"
             />
             <div className="home-lower">
-              <p className="home-text20">
+              <p className="home-text21">
                 By registering to the platform, you agree that your information
                 will be saved into local MySQL server. 
               </p>
@@ -210,11 +209,13 @@ const Home = (props) => {
       <div className="home-footer">
         <div className="home-left1">
           <div className="home-brand">
-            <img
-              alt="image"
-              src="/aztrlogobeyazasset%202.svg"
-              className="home-image5"
-            />
+            <a href="#main-logo" className="home-link">
+              <img
+                alt="image"
+                src="/aztrlogobeyazasset%202.svg"
+                className="home-image5"
+              />
+            </a>
           </div>
         </div>
         <div className="home-right1">
@@ -235,7 +236,7 @@ const Home = (props) => {
               href="https://linkedin.com/in/rburaksaritas"
               target="_blank"
               rel="noreferrer noopener"
-              className="home-link"
+              className="home-link1"
             >
               <div className="home-social social">
                 <img
