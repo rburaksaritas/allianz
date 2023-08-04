@@ -9,7 +9,7 @@ const Home = (props) => {
   return (
     <div className="home-container">
       <Helmet>
-        <title>Medica template</title>
+        <title>Allianz OMS - Home</title>
         <meta property="og:title" content="Medica template" />
       </Helmet>
       <section className="home-hero">
@@ -31,49 +31,6 @@ const Home = (props) => {
                 <br></br>
               </span>
             </a>
-          </div>
-          <div data-thq="thq-burger-menu" className="home-burger-menu">
-            <svg viewBox="0 0 1024 1024" className="home-icon">
-              <path d="M128 554.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 298.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 810.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667z"></path>
-            </svg>
-          </div>
-          <div data-thq="thq-mobile-menu" className="home-mobile-menu">
-            <div
-              data-thq="thq-mobile-menu-nav"
-              data-role="Nav"
-              className="home-nav"
-            >
-              <div className="home-container1">
-                <img
-                  alt="image"
-                  src="/Branding/logo-1500h.png"
-                  className="home-image"
-                />
-                <div data-thq="thq-close-menu" className="home-menu-close">
-                  <svg viewBox="0 0 1024 1024" className="home-icon2">
-                    <path d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"></path>
-                  </svg>
-                </div>
-              </div>
-              <nav
-                data-thq="thq-mobile-menu-nav-links"
-                data-role="Nav"
-                className="home-nav1"
-              >
-                <span className="home-text03">Features</span>
-                <span className="home-text04">How it works</span>
-                <span className="home-text05">Prices</span>
-                <span className="home-text06">Contact</span>
-                <a href="#book" className="home-book1 button button-main">
-                  <img
-                    alt="image"
-                    src="/Icons/calendar.svg"
-                    className="home-image1"
-                  />
-                  <span className="home-text07">Book an appointment</span>
-                </a>
-              </nav>
-            </div>
           </div>
         </header>
         <div className="home-main">

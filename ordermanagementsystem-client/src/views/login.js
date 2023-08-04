@@ -9,7 +9,7 @@ const Login = (props) => {
   return (
     <div className="login-container">
       <Helmet>
-        <title>Login - Medica template</title>
+        <title>Allianz OMS - Login</title>
         <meta property="og:title" content="Login - Medica template" />
       </Helmet>
       <header data-thq="thq-navbar" className="login-navbar">
@@ -99,12 +99,9 @@ const Login = (props) => {
             />
             <div className="login-lower">
               <div className="login-button">
-                <button className="login-book2 button button-main">
-                  <span>
-                    <span>Login</span>
-                    <br></br>
-                  </span>
-                </button>
+                <Link to="/admin" className="login-login-button button button-main">
+                  <span>Login</span>
+                </Link>
               </div>
             </div>
           </div>
