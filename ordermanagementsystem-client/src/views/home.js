@@ -17,9 +17,9 @@ const Home = (props) => {
           <div className="home-left">
             <Link to="/" className="home-navlink">
               <img
+                id="main-logo"
                 alt="allianzlogo"
                 src="/external/pastedimage-75g2.svg"
-                id="main-logo"
                 className="home-pasted-image"
               />
             </Link>
